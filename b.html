@@ -386,10 +386,20 @@ if (!document.documentElement.classList.contains('edit') && matchMedia('(max-wid
   #s-members .rope{visibility:hidden}
   .scene.s-plan .plan{left:64px!important;right:64px!important}   /* סבב 2: מקום לחוט בקצוות */
 
+
+  /* 16.11: הקישור למודל החי, בנול ובסיום. קטן, בכתב האתר, קו חרדל דק מתחתיו */
+  .mlink{display:inline-flex;align-items:center;gap:7px;font-family:var(--text);font-size:var(--T);letter-spacing:.04em;color:var(--ink)!important;text-decoration:none;
+    padding-bottom:3px;border-bottom:1px solid #C79A3A;transition:gap .3s,border-color .3s;cursor:pointer;position:relative;z-index:3}
+  .mlink svg{width:14px;height:14px;fill:none;stroke:#C79A3A;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+  .mlink:hover{gap:11px;border-bottom-color:#A87E2A}
+  .s-loom .mlinkp{margin-top:16px} .s-end .mlinkp{margin-top:22px}
   /* ===== 16.11 טלפון (html.m, עד 820 רוחב או עד 500 גובה). במחשב לא חל כלום מכאן ===== */
   html.m,html.m body{height:auto;overflow-x:hidden}
   html.m{scroll-snap-type:y proximity;-webkit-text-size-adjust:100%}
   html.m #thread-cv,html.m #plumb,html.m .hint,html.m .tag{display:none!important}
+  /* החוט בטלפון (16.11 ערב): קנבס בתוך כל שקף, מעל הרקע ומתחת לסרגל. בשקף שבו הוא נוחת על הכותרת, הוא במקום הקו */
+  html.m canvas.mthread{position:absolute;left:0;top:0;z-index:2;pointer-events:none}
+  html.m .scene.mth .hd .rule{visibility:hidden!important}
   html.m nav{height:46px;padding:0 10px;background:rgba(244,241,234,.94);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
     box-shadow:0 1px 0 rgba(150,118,76,.18);color:#5A4636!important}
   html.m nav .brand{display:none}
@@ -654,6 +664,7 @@ if (!document.documentElement.classList.contains('edit') && matchMedia('(max-wid
       <p class="body rv">המודל נבנה בקוד, ישירות מתוך קובץ האוטוקאד. כל קיר, פתח ומפלס נקרא מהשרטוט, שואב את הגיאומטריה המדויקת מתוך התוכנית האדריכלית ואת העיצוב המדויק (צבעים, טקסטורות, ריהוט, נגרויות וכו׳) מתוך היכרות מעמיקה עם הפרויקט ובריף עיצובי מדויק.</p>
       <p class="body rv">באמצעות המודל החי ניתן לערוך סיור בתוך המודל, להיכנס לכל חדר, לעמוד בו ולבדוק אותו, לפני שמשהו נבנה.</p>
       <p class="body rv">מתוך המודל לאחר בחירת האלמנטיים העיצוביים - ניתן להוציא תוכניות עבודה והדמיות</p>
+      <p class="mlinkp rv"><a class="mlink" href="model.html" target="_blank" rel="noopener">למודל החי<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5 11L11 5M6 5h5v5"/></svg></a></p>
     </div>
     <figure class="media loomfig rv">
       <div class="stage" id="stage">
@@ -706,6 +717,7 @@ if (!document.documentElement.classList.contains('edit') && matchMedia('(max-wid
     <h2 class="rv">מתוך חוטים בודדים, בית אחד</h2>
     <div class="rule rv"></div>
     <div class="sig rv">ענת אמיר · שתי וערב · פיארברג 11</div>
+    <div class="mlinkp rv"><a class="mlink" href="model.html" target="_blank" rel="noopener">למודל החי<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5 11L11 5M6 5h5v5"/></svg></a></div>
   </div></div>
 </div></section>
 
@@ -764,9 +776,62 @@ function mobileInit(){
       at(6000, () => { show(3); vid.currentTime = 0.8; vid.play().catch(() => {}); vid.classList.add('show'); }); };
     vid.muted = true; vid.setAttribute('playsinline', '');
     new IntersectionObserver(es => es.forEach(e => { if (e.intersectionRatio >= .5) run(); else if (!e.isIntersecting) reset(); }), { threshold: [0, .5] }).observe(st); }
+  mthread();
   // קישור ישיר לשקף: ?s=מזהה
   { const want = new URLSearchParams(location.search).get('s'), t = want && document.getElementById(want);
     if (t) addEventListener('load', () => setTimeout(() => scrollTo({ top: topOf(t) }), 200)); }
+}
+// ===== 16.11 ערב (ענת: "תבנה"): החוט בחרדל גם בטלפון. אותו חוט מצולם ואותו גוון כמו במחשב, בצורה של טור אחד:
+// בכל שקף הוא יורד בשוליים השמאליים, ובפינה מעוגלת פונה ונמתח לאורך קו הכותרת, במקומו. בחתכים ובחומרים רק ירידה בשוליים
+// (כמו במחשב, "קצת מפריע"), ובפתיחה, בסרטונים ובסיום קו תלוי בשוליים. כל שקף מצייר את החוט שלו פעם אחת כשהוא נכנס למסך,
+// על קנבס קטן בתוך השקף, כך שאין ציור בזמן הגלילה. לא עובר על הסרגל העליון ולא על מלל
+function mthread(){
+  const SIDE = { 's-section-aa':1, 's-section-bb':1, 's-section-cc':1, 's-section-dd':1, 's-mat':1 };
+  const EDGE = { 's-cover':1, 's-end':1 };
+  const TW = 32, TH = 1000, THW = 8, R = 26, DUR = 1700, TINT = '#C99A2E';
+  const tile = new Image(); tile.src = 'media/מבחן-חוט/חוט.png';
+  let tex = null; const items = [];
+  const mk = () => { const t = document.createElement('canvas'); t.width = TW; t.height = TH; const g = t.getContext('2d');
+    g.drawImage(tile, 0, 0); g.globalCompositeOperation = 'multiply'; g.fillStyle = TINT; g.fillRect(0, 0, TW, TH);
+    g.globalCompositeOperation = 'destination-in'; g.drawImage(tile, 0, 0); return t; };
+  const corner = (pts) => { if (pts.length < 3) return pts; const o = [pts[0]];   // פינות מעוגלות
+    for (let i = 1; i < pts.length - 1; i++) { const p = pts[i-1], v = pts[i], n = pts[i+1];
+      const l1 = Math.hypot(p[0]-v[0], p[1]-v[1]), l2 = Math.hypot(n[0]-v[0], n[1]-v[1]), d = Math.min(R, l1/2, l2/2);
+      const a = [v[0]+(p[0]-v[0])/l1*d, v[1]+(p[1]-v[1])/l1*d], b = [v[0]+(n[0]-v[0])/l2*d, v[1]+(n[1]-v[1])/l2*d];
+      for (let k = 0; k <= 8; k++) { const t = k/8, u = 1-t; o.push([u*u*a[0]+2*u*t*v[0]+t*t*b[0], u*u*a[1]+2*u*t*v[1]+t*t*b[1]]); } }
+    o.push(pts[pts.length-1]); return o; };
+  const geom = s => { const sk = s.querySelector(':scope > .sk'), r0 = sk.getBoundingClientRect(), w = r0.width, h = r0.height;
+    const gut = parseFloat(getComputedStyle(sk).paddingLeft) || 16, x = Math.max(5, Math.min(12, gut / 2));
+    const rule = !SIDE[s.id] && !EDGE[s.id] && s.querySelector('.hd .rule');
+    if (rule) { const rr = rule.getBoundingClientRect(); if (rr.width) { const y = rr.top - r0.top + rr.height / 2, xr = Math.min(w - gut / 2, rr.right);
+      s.classList.add('mth'); return { w, h: Math.ceil(y + THW + 8), pts: corner([[x, -2], [x, y], [xr, y]]) }; } }
+    const top = s.classList.contains('s-tour') || EDGE[s.id] || SIDE[s.id] ? 0 : 0;
+    return { w: Math.ceil(x + THW + 8), h, pts: [[x, top - 2], [x, h + 2]] }; };
+  const draw = it => { const { cv, g, pts } = it, dpr = it.dpr; g.setTransform(1, 0, 0, 1, 0, 0); g.clearRect(0, 0, cv.width, cv.height);
+    if (!tex) return; g.setTransform(dpr, 0, 0, dpr, 0, 0);
+    g.shadowColor = 'rgba(40,25,10,.28)'; g.shadowBlur = 5 * dpr; g.shadowOffsetY = 1.5 * dpr;
+    let L = 0; const seg = []; for (let i = 0; i < pts.length - 1; i++) { const l = Math.hypot(pts[i+1][0]-pts[i][0], pts[i+1][1]-pts[i][1]); seg.push(l); L += l; }
+    let left = L * it.p, v = 0;
+    for (let i = 0; i < pts.length - 1 && left > 0; i++) { let len = seg[i]; if (len < .1) continue;
+      const dx = (pts[i+1][0]-pts[i][0]) / len, dy = (pts[i+1][1]-pts[i][1]) / len; len = Math.min(len, left); left -= len;
+      g.save(); g.translate(pts[i][0], pts[i][1]); g.rotate(Math.atan2(dy, dx) - Math.PI / 2);
+      for (let done = 0; done < len; ) { const sv = v % (TH - 40), piece = Math.min(len - done, TH - 40 - sv);   // קטעים ארוכים: המרקם חוזר
+        g.drawImage(tex, 0, sv, TW, piece + 1, -THW / 2, done - .5, THW, piece + 1); done += piece; v += piece; }
+      g.restore(); } };
+  const layout = () => { items.forEach(it => { const q = geom(it.s), dpr = Math.min(2, devicePixelRatio || 1);
+    Object.assign(it, q, { dpr }); it.cv.width = Math.ceil(q.w * dpr); it.cv.height = Math.ceil(q.h * dpr);
+    it.cv.style.width = q.w + 'px'; it.cv.style.height = q.h + 'px'; draw(it); }); };
+  document.querySelectorAll('.scene').forEach(s => { const sk = s.querySelector(':scope > .sk'); if (!sk) return;
+    const cv = document.createElement('canvas'); cv.className = 'mthread'; sk.appendChild(cv);
+    items.push({ s, cv, g: cv.getContext('2d'), p: 0, pts: [] }); });
+  const grow = it => { if (it.run || it.p >= 1) return; it.run = true; const t0 = performance.now();
+    const f = now => { const t = Math.min(1, (now - t0) / DUR); it.p = t < .5 ? 2*t*t : 1 - Math.pow(-2*t + 2, 2) / 2; draw(it);
+      if (t < 1) requestAnimationFrame(f); else it.run = false; }; requestAnimationFrame(f); };
+  const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) grow(items.find(i => i.s === e.target)); }), { threshold: 0, rootMargin: '0px 0px -30% 0px' });
+  const go = () => { tex = mk(); layout(); items.forEach(it => io.observe(it.s)); };
+  tile.complete && tile.naturalWidth ? go() : tile.addEventListener('load', go);
+  let rt; addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(layout, 200); });
+  addEventListener('load', () => setTimeout(layout, 100));   // אחרי שהתמונות נטענו, הכותרות במקומן הסופי
 }
 // מעבר בין מחשב לטלפון (חלון שהוקטן מאוד): טוענים מחדש. סיבוב הטלפון נשאר בטלפון ולא טוען
 { const mq = matchMedia('(max-width: 820px), (max-height: 500px)'); mq.addEventListener('change', () => { if (!document.documentElement.classList.contains('edit')) location.reload(); }); }
