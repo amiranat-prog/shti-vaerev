@@ -400,6 +400,11 @@ if (!document.documentElement.classList.contains('edit') && matchMedia('(max-wid
   /* 16.11 קליקר: החתך נחשף לפני התכניות הקטנות (רק במחשב) */
   [id^="s-section"] .plan img{transition:clip-path .9s cubic-bezier(.22,.61,.36,1)}
   html.m [id^="s-section"] .plan img{clip-path:none!important;transition:none}
+  /* ===== 16.11 גרסה א: שקף המודל החי, אחרי סרטון א ===== */
+  .s-live .stage{background:#F3EFE8}
+  .s-live .mlinkp{margin-top:22px}
+  .s-live .mbtn{font-size:calc(var(--T) * 1.15);padding:12px 22px;border:1px solid #C79A3A!important;border-radius:999px;gap:10px;background:rgba(255,255,255,.55)}
+  .s-live .mbtn:hover{gap:14px;background:#fff}
   /* ===== 16.11 טלפון (html.m, עד 820 רוחב או עד 500 גובה). במחשב לא חל כלום מכאן ===== */
   html.m,html.m body{height:auto;overflow-x:hidden}
   html.m{scroll-snap-type:y proximity;-webkit-text-size-adjust:100%}
@@ -682,13 +687,30 @@ if (!document.documentElement.classList.contains('edit') && matchMedia('(max-wid
   </div>
 </div></section>
 
+
 <section class="scene s-tour s-vid" id="s-vid-a" data-ch="3" style="--acc:var(--sage)"><div class="sk">
   <div class="wrap">
     <div class="ttl"><small>פרק ג · התכנון</small>תהליך העבודה - בניית מודל בתלת מימד</div>
     <div class="vbox"><video src="media/סרטון-א-16.11.mp4" poster="media/סרטון-א-16.11.jpg" playsinline preload="metadata"></video><div class="play"><span></span></div></div>
   </div>
 </div></section>
+<section class="scene s-loom s-live alt" id="s-live" data-ch="3" style="--acc:var(--oak)"><div class="sk">
+  <div class="wrap">
+    <header class="hd"><div class="ch rv">פרק ג · התכנון</div><h2 class="rv">המודל החי<small>הבית כולו, כפי שנבנה מתוך קובץ האוטוקאד</small></h2><div class="rule rv"></div></header>
+    <div class="txt glass">
+      <p class="body rv">כאן פותחים את המודל, מסובבים אותו ונכנסים לכל חדר.</p>
+      <p class="mlinkp rv"><a class="mlink mbtn" href="model.html" target="_blank" tabindex="-1" rel="noopener">לפתיחת המודל החי<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5 11L11 5M6 5h5v5"/></svg></a></p>
+    </div>
+    <figure class="media loomfig rv"><div class="stage"><img src="media/מודל-חי/מודל-חי-מבחוץ.webp" alt="המודל החי מבחוץ"></div></figure>
+  </div>
+</div></section>
 
+<section class="scene s-tour s-vid" id="s-vid-b" data-ch="3" style="--acc:var(--sage)"><div class="sk">
+  <div class="wrap">
+    <div class="ttl"><small>פרק ג · התכנון</small>תהליך העבודה - הפקת תוכניות עבודה</div>
+    <div class="vbox"><video src="media/סרטון-ב-16.11.mp4" poster="media/סרטון-ב-16.11.jpg" playsinline preload="metadata"></video><div class="play"><span></span></div></div>
+  </div>
+</div></section>
 <section class="scene s-plan" id="s-section-aa" data-ch="3" style="--acc:var(--oak)"><div class="sk">
   <div class="wrap"><header class="hd"><div class="ch rv">פרק ג · התכנון</div><h2 class="rv">חתך א-א<small>לאורך רצועת האור, מבט צפונה אל המטבח</small></h2><div class="rule rv"></div></header>
     <div class="plan rv"><img src="media/חתכים-מצגת-15.11/חתך-א-א.png" data-split="0.7092" alt=""></div></div>
@@ -704,12 +726,6 @@ if (!document.documentElement.classList.contains('edit') && matchMedia('(max-wid
 <section class="scene s-plan" id="s-section-dd" data-ch="3" style="--acc:var(--oak)"><div class="sk">
   <div class="wrap"><header class="hd"><div class="ch rv">פרק ג · התכנון</div><h2 class="rv">חתך ד-ד</h2><div class="rule rv"></div></header>
     <div class="plan rv"><img src="media/חתכים-מצגת-15.11/חתך-ד-ד.png" data-split="0.7099" alt=""></div></div>
-</div></section>
-<section class="scene s-tour s-vid" id="s-vid-b" data-ch="3" style="--acc:var(--sage)"><div class="sk">
-  <div class="wrap">
-    <div class="ttl"><small>פרק ג · התכנון</small>תהליך העבודה - הפקת תוכניות עבודה</div>
-    <div class="vbox"><video src="media/סרטון-ב-16.11.mp4" poster="media/סרטון-ב-16.11.jpg" playsinline preload="metadata"></video><div class="play"><span></span></div></div>
-  </div>
 </div></section>
 
 <section class="scene s-mat" id="s-mat" data-ch="4" style="--acc:var(--oak)"><div class="sk">
@@ -982,11 +998,12 @@ const LAND = [
   { x: 0.035, tip: 0.36, s: 0.80 },  // s-plan-f1
   { x: 0.060, tip: 0.62, s: 0.90 },  // s-loom
   { x: 0.040, tip: 0.50, s: 0.85 },  // s-vid-a
+  { x: 0.060, tip: 0.62, s: 0.90 },  // s-live
+  { x: 0.040, tip: 0.50, s: 0.85 },  // s-vid-b
   { x: 0.045, tip: 0.42, s: 0.85 },  // s-section-aa
   { x: 0.045, tip: 0.42, s: 0.85 },  // s-section-bb
   { x: 0.045, tip: 0.42, s: 0.85 },  // s-section-cc
   { x: 0.045, tip: 0.42, s: 0.85 },  // s-section-dd
-  { x: 0.040, tip: 0.50, s: 0.85 },  // s-vid-b
   { x: 0.045, tip: 0.42, s: 0.85 },  // s-mat
   { x: 0.040, tip: 0.50, s: 0.85 },  // s-tour
   { x: 0.500, tip: 0.46, s: 1.00 },  // s-end
@@ -1220,7 +1237,8 @@ const POSES = {
   's-thread': { kind: 'frame', sel: '.media' },
   // ענת 15.11: מסגרת עליונה. בתוכנית הראשונה למעלה ויורד בקצה השמאלי, בבאה ממשיך מהפינה השמאלית העליונה ימינה ויורד בקצה הימני
   's-plan-gf':{ kind: 'topL', sel: 'h2', rule: true }, 's-plan-f1':{ kind: 'topR', sel: 'h2', rule: true },
-  's-loom':   { kind: 'frame', sel: '.stage', sel2: '#steps' },   // ענת 15.11: מתחת לשורת הכיתוב
+  's-loom':   { kind: 'frame', sel: '.stage', sel2: '#steps' },
+  's-live':   { kind: 'frame', sel: '.stage' },   // ענת 15.11: מתחת לשורת הכיתוב
   // ענת 15.11 ערב: בחתכים החוט "קצת מפריע". רק עובר מלמעלה למטה בשוליים השמאליים, רחוק מהכותרת, וכל חתך ממשיך בדיוק מהקודם
   's-section-aa':{ kind: 'side' }, 's-section-bb':{ kind: 'side' },
   's-section-cc':{ kind: 'side' }, 's-section-dd':{ kind: 'side' },
