@@ -388,7 +388,7 @@ function insideNow(){
 function setWalk(on){
   walk=on; ctl.enabled=!on; stage.classList.toggle('walk',on); cross.hidden=!on;
   hint.textContent=on?H.walk:H.orbit;
-  cam.fov=on?60:52; cam.updateProjectionMatrix();
+  cam.fov=on?74:52; cam.updateProjectionMatrix();
   if(on){
     const e=new THREE.Euler().setFromQuaternion(cam.quaternion,'YXZ');
     yawPitch.y=e.y; yawPitch.p=Math.max(-1.35,Math.min(1.35,e.x));
@@ -418,7 +418,7 @@ cvs.addEventListener('wheel',e=>{
   if(walk){
     const d=new THREE.Vector3(0,0,-1).applyQuaternion(cam.quaternion);
     const len=Math.hypot(d.x,d.z)||1;
-    const v=Math.max(-40,Math.min(40,e.deltaY*(e.deltaMode===1?16:1)))*0.004;
+    const v=Math.max(-40,Math.min(40,e.deltaY*(e.deltaMode===1?16:1)))*0.0025;
     // כמה צעדים קטנים ולא קפיצה אחת, כדי שההחלקה לאורך קיר תרגיש רציפה
     for(let i=0;i<3;i++)advance((d.x/len)*v/3,(d.z/len)*v/3);
   }else{
@@ -708,7 +708,7 @@ size();
   const touch = matchMedia('(pointer:coarse)').matches;
   document.getElementById('pubTip').textContent = touch
     ? 'גרירה מסובבת · צביטה מגדילה · בחרי חדר כדי להיכנס פנימה'
-    : 'גרירה מסובבת · גלגלת מגדילה · דאבל קליק על הרצפה נכנס פנימה';
+    : 'בחוץ: גרירה מסובבת, גלגלת מגדילה · בפנים: גרירה מסתובבת במקום, גלגלת או חצים הולכים, הקירות עוצרים';
   const btn = (sec, label) => [...document.querySelectorAll('#rail .sec')]
     .filter(s => s.querySelector('h2')?.textContent.trim() === sec)
     .flatMap(s => [...s.querySelectorAll('button')])
@@ -718,10 +718,17 @@ size();
     try { window.__fp.setRendered && window.__fp.setRendered(true); } catch (e) {}
     window.dispatchEvent(new Event('resize'));
   });
+  // ענת 16.11: בחדר "זום אין מדי" ו"כשאני הולכת אחורה אני נכנסת בקיר". בתוך הבית עוברים למצב הליכה:
+  // זווית רחבה, גרירה מסובבת במקום, גלגלת וחצים הולכים, והקירות, הזכוכית והנגרות עוצרים
+  const walkOn = () => document.getElementById('navwalk').click();
+  const walkOff = () => document.getElementById('navorbit').click();
   document.getElementById('pubRoom').addEventListener('change', e => {
-    const b = btn('חדרים', e.target.value); if (b) b.click(); e.target.blur();
+    walkOff();
+    const b = btn('חדרים', e.target.value); if (b) { b.click(); walkOn(); } e.target.blur();
   });
+  document.querySelector('#stage canvas, canvas').addEventListener('dblclick', () => setTimeout(walkOn, 0));
   document.getElementById('pubOut').addEventListener('click', () => {
+    walkOff();
     const b = btn('מבט', 'דוללהאוס'); if (b) b.click();
     document.getElementById('pubRoom').value = '';
   });
