@@ -222,7 +222,7 @@ const scene=new THREE.Scene();
 const cam=new THREE.PerspectiveCamera(52,1,.04,400);
 const ctl=new THREE.OrbitControls(cam,cvs);
 ctl.enableDamping=true; ctl.dampingFactor=.08; ctl.maxDistance=90;
-ctl.rotateSpeed=.40; ctl.panSpeed=.75;   // ענת 9.9: הסיבוב היה מהיר מדי
+ctl.rotateSpeed=.30; ctl.panSpeed=.75;   // ענת 9.9: הסיבוב היה מהיר מדי
 ctl.enableZoom=matchMedia('(pointer:coarse)').matches;   // הגלגלת מטופלת אצלנו, כדי שהכיוון יהיה זהה בפנים ובחוץ
 /* מיפוי העכבר של סקצ'אפ, לבקשת ענת 9.9:
    גלגלת זום · לחיצה על הגלגל וגרירה מסובבת · שיפט עם הגלגל מזיז את התמונה.
@@ -418,13 +418,13 @@ cvs.addEventListener('wheel',e=>{
   if(walk){
     const d=new THREE.Vector3(0,0,-1).applyQuaternion(cam.quaternion);
     const len=Math.hypot(d.x,d.z)||1;
-    const v=(closer?1:-1)*0.42;
+    const v=Math.max(-40,Math.min(40,e.deltaY*(e.deltaMode===1?16:1)))*0.004;
     // כמה צעדים קטנים ולא קפיצה אחת, כדי שההחלקה לאורך קיר תרגיש רציפה
     for(let i=0;i<3;i++)advance((d.x/len)*v/3,(d.z/len)*v/3);
   }else{
     const off=new THREE.Vector3().subVectors(cam.position,ctl.target);
     const dist=off.length()||1;
-    const nd=Math.max(1.2,Math.min(ctl.maxDistance,dist*(closer?0.86:1.16)));
+    const dy=Math.max(-40,Math.min(40,e.deltaY*(e.deltaMode===1?16:1)));const nd=Math.max(1.6,Math.min(ctl.maxDistance,dist*Math.exp(-dy*0.0018)));
     cam.position.copy(ctl.target).add(off.setLength(nd));
     ctl.update();
   }
