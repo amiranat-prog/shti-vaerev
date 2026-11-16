@@ -1128,14 +1128,16 @@ document.querySelectorAll('.s-tour video').forEach(v => { const s = v.closest('.
 
 // ===== 16.11 קליקר: שכבות, סרטונים, מקשים, מסך שחור =====
 window.__build = (() => {
-  const L = { 's-family': ['.txt', '.media'], 's-insp': ['.txt', '.media'], 's-concept': ['.txt'],
+  // ענת 16.11 ערב: "בכל השקפים חוץ מהארגז כלים והנפשות במשפחה הכל צריך לעלות ביחד". השכבות כבויות (ALL_TOGETHER), הארגז והנפשות נשארים בקליקים שלהם
+  const ALL_TOGETHER = true;
+  const L = ALL_TOGETHER ? {} : { 's-family': ['.txt', '.media'], 's-insp': ['.txt', '.media'], 's-concept': ['.txt'],
     's-meet': ['.row3 .mc:nth-child(1)', '.row3 .mc:nth-child(2)', '.row3 .mc:nth-child(3)'],
     's-life': ['.nodes .nd'], 's-prog': ['.floors .fl:nth-child(1)', '.floors .fl:nth-child(2)'],
     's-thread': ['.txt', '.media'], 's-mat': ['.pal', '.mats'] };
   const IN = () => ({ opacity: 1, y: 0, duration: .9, stagger: .07, ease: 'power3.out', overwrite: true });
   const OUT = () => ({ opacity: 0, y: 28, duration: .4, overwrite: true });
   const st = {}, layers = s => (L[s.id] || []).map(q => [...s.querySelectorAll(q)].flatMap(e => [e, ...e.querySelectorAll('.rv')]));   // הבועה עצמה ופריטי הטקסט שבתוכה
-  const SEC = s => /^s-section/.test(s.id) && !!parseFloat((s.querySelector('.plan img') || {}).dataset?.split);
+  const SEC = s => !ALL_TOGETHER && /^s-section/.test(s.id) && !!parseFloat((s.querySelector('.plan img') || {}).dataset?.split);
   // החתך: גוזרים את התמונה עד הרווח שלפני התכניות הקטנות. בגודל הפריסה (בלי ההגדלה של המעבר), לפי השטח שהציור תופס בפועל
   const clip = (s, closed, anim) => { const im = s.querySelector('.plan img'), f = parseFloat(im.dataset.split);
     if (!anim) im.style.transition = 'none';
