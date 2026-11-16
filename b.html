@@ -928,23 +928,22 @@ const toolbox = (() => {
     onLeave: () => v.pause(), onLeaveBack: () => v.pause() });
 }
 
-// ---- הנול (16.11 קליקר): נכנסים בקווים, וכל קליק מוסיף שלב: מודל לבן, צבע, ואז הסרטון של ענת (הסקיצה נצבעת להדמיה). הקודם מחזיר שלב ----
+// ---- הנול: שלושת השלבים מאותה מצלמה, קווים, מודל לבן, צבע, ואז הסרטון של ענת: הסקיצה נצבעת במכחול להדמיה (21.10, "פעם ראשונה שהתחלתי להתרגש"; ענת 8.11: להחזיר לנול) ----
 {
   const imgs = gsap.utils.toArray('#stage img'), steps = gsap.utils.toArray('#steps span'), vid = document.getElementById('loomVid');
-  let k = 0;
-  const show = n => steps.forEach((el, i) => el.classList.toggle('on', i === n));
-  const apply = n => { k = n;
-    gsap.to(imgs[1], { opacity: n >= 1 ? 1 : 0, duration: 1.2, overwrite: true });
-    gsap.to(imgs[2], { opacity: n >= 2 ? 1 : 0, duration: 1.2, overwrite: true });
-    if (n >= 3) { vid.currentTime = 0.8; vid.play().catch(() => {}); gsap.to(vid, { opacity: 1, duration: 1.2, overwrite: true }); }
-    else { vid.pause(); gsap.to(vid, { opacity: 0, duration: .6, overwrite: true }); }
-    show(n); };
-  const reset = () => { k = 0; vid.pause(); gsap.killTweensOf([...imgs, vid]); gsap.set(imgs, { opacity: 0 }); gsap.set(vid, { opacity: 0 }); gsap.set(imgs[0], { opacity: 1 }); show(0); };
+  let tl;
+  let loomK = 0; window.__loomState = () => loomK;
+  const show = k => { loomK = k; steps.forEach((el, i) => el.classList.toggle('on', i === k)); };
+  const reset = () => { if (tl) tl.kill(); vid.pause(); gsap.set(imgs, { opacity: 0 }); gsap.set(vid, { opacity: 0 }); gsap.set(imgs[0], { opacity: 1 }); show(0); };
   ScrollTrigger.create({ trigger: '#s-loom', start: 'top 45%', end: 'bottom 45%',
-    onEnter: reset, onLeave: () => vid.pause(), onEnterBack: () => { if (k >= 3 && vid.currentTime < vid.duration - 0.1) vid.play().catch(() => {}); },
+    onEnter: () => { reset();
+      tl = gsap.timeline({ delay: 1.2 })
+        .to(imgs[1], { opacity: 1, duration: 1.2, onStart: () => show(1) })
+        .to(imgs[2], { opacity: 1, duration: 1.2, onStart: () => show(2) }, '+=1.1')
+        // הסרטון מתחיל מהרגע שהכחול נוגע בנייר, כדי שההצלבה תהיה מהמודל הצבוע אל הצביעה ולא חזרה לקווים. נשאר על הפריים האחרון
+        .to(vid, { opacity: 1, duration: 1.2, onStart: () => { show(3); vid.currentTime = 0.8; vid.play().catch(() => {}); } }, '+=1.3'); },
+    onLeave: () => vid.pause(), onEnterBack: () => { if (vid.currentTime < vid.duration - 0.1) vid.play().catch(() => {}); },
     onLeaveBack: reset });
-  window.__loomStep = d => { if (d > 0 && k < 3) { apply(k + 1); return true; } if (d < 0 && k > 0) { apply(k - 1); return true; } return false; };
-  window.__loomState = () => k;
 }
 
 // ---- הסיור: לחיצה או רווח מפעילים ועוצרים ----
