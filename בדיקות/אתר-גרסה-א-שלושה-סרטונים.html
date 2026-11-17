@@ -400,6 +400,33 @@ if (!document.documentElement.classList.contains('edit') && matchMedia('(max-wid
   /* 16.11 קליקר: החתך נחשף לפני התכניות הקטנות (רק במחשב) */
   [id^="s-section"] .plan img{transition:clip-path .9s cubic-bezier(.22,.61,.36,1)}
   html.m [id^="s-section"] .plan img{clip-path:none!important;transition:none}
+  /* ===== 16.11 גרסה א: שקף המודל החי, אחרי סרטון א ===== */
+  .s-live .stage{background:#F3EFE8}
+  .s-live .mlinkp{margin-top:22px}
+  .s-live .mbtn{font-size:calc(var(--T) * 1.15);padding:12px 22px;border:1px solid #C79A3A!important;border-radius:999px;gap:10px;background:rgba(255,255,255,.55)}
+  .s-live .mbtn:hover{gap:14px;background:#fff}
+  /* ===== 17.11 גרסה א: פקדים שקטים לסרטוני התהליך (רק במחשב; בטלפון הפקדים של הדפדפן) ===== */
+  .s-tour .vctl{position:absolute;left:0;right:0;bottom:0;z-index:3;direction:ltr;display:flex;align-items:center;gap:12px;
+    padding:44px clamp(20px,3vw,48px) 20px;background:linear-gradient(to top,rgba(24,19,15,.62),rgba(24,19,15,0));color:#F4F1EA;font-family:var(--text);
+    opacity:0;pointer-events:none;transition:opacity .45s}
+  .s-tour .vbox.ctl .vctl{opacity:1;pointer-events:auto}
+  .s-tour .vbox.idle,.s-tour .vbox.idle *{cursor:none}
+  .vctl .vb{all:unset;box-sizing:border-box;cursor:pointer;width:34px;height:34px;display:grid;place-items:center;border-radius:50%;color:inherit;opacity:.8;transition:opacity .2s,background .2s}
+  .vctl .vb:hover{opacity:1;background:rgba(244,241,234,.12)}
+  .vctl svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.4;stroke-linecap:round;stroke-linejoin:round;overflow:visible}
+  .vctl .i-play{fill:currentColor;stroke:none}
+  .vbox.vplaying .vctl .i-play,.vbox:not(.vplaying) .vctl .i-pause{display:none}
+  .vctl .tm{font-size:12.5px;letter-spacing:.06em;font-variant-numeric:tabular-nums;opacity:.72;white-space:nowrap;margin:0 4px}
+  .vctl .tm b,.vctl .tm i{font-weight:400;font-style:normal}
+  .vctl .trk{flex:1;height:20px;position:relative;cursor:pointer}
+  .vctl .trk::before{content:'';position:absolute;left:0;right:0;top:9px;height:2px;border-radius:2px;background:rgba(244,241,234,.26)}
+  .vctl .fill{position:absolute;left:0;top:9px;height:2px;border-radius:2px;background:#C79A3A;width:0}
+  .vctl .knob{position:absolute;top:5px;left:0;width:10px;height:10px;margin-left:-5px;border-radius:50%;background:#F4F1EA;opacity:0;transition:opacity .2s}
+  .vctl .trk:hover .knob,.vctl .trk.drag .knob{opacity:1}
+  .vctl .sp{width:auto;min-width:46px;padding:0 12px;height:28px;border-radius:999px;border:1px solid rgba(244,241,234,.36);font-size:12.5px;letter-spacing:.04em;text-align:center}
+  html.m .vctl{display:none!important}
+  /* ===== 17.11 ערב: מסך מלא. הסרטונים ממלאים את השקף בכל מסך רחב (16:10, 16:9) ===== */
+  @media (min-aspect-ratio: 3/2){ html:not(.m) .s-tour video{object-fit:cover} }
   /* ===== 16.11 טלפון (html.m, עד 820 רוחב או עד 500 גובה). במחשב לא חל כלום מכאן ===== */
   html.m,html.m body{height:auto;overflow-x:hidden}
   html.m{scroll-snap-type:y proximity;-webkit-text-size-adjust:100%}
@@ -514,9 +541,8 @@ if (!document.documentElement.classList.contains('edit') && matchMedia('(max-wid
     <li><a data-to="s-cover" data-ch="0" class="on">פתיחה</a></li>
     <li><a data-to="s-family" data-ch="1">הסיפור</a></li>
     <li><a data-to="s-concept" data-ch="2">הרעיון</a></li>
-    <li><a data-to="s-thread" data-ch="3">החומר</a></li>
-    <li><a data-to="s-plan-gf" data-ch="4">התכנון</a></li>
-    <li><a data-to="s-mat" data-ch="5">הבית</a></li>
+    <li><a data-to="s-plan-gf" data-ch="3">התכנון</a></li>
+    <li><a data-to="s-tour" data-ch="4">הבית</a></li>
   </ul>
 </nav>
 <div class="hint" id="hint">SCROLL</div>
@@ -604,7 +630,7 @@ if (!document.documentElement.classList.contains('edit') && matchMedia('(max-wid
     <div class="box"></div>
     <header class="hd"><div class="ch rv">פרק ב · הרעיון</div><h2 class="rv">ארגז כלים</h2><div class="rule rv"></div><div class="en rv">Materiality &amp; Spatial Language</div><p class="lead rv">הגריד של שתי וערב מבוטא בגריד עץ חם שבו משתלבים הקווים המעוגלים מהיצירות של קסם</p></header>
     <div class="cards" id="toolCards">
-      <div class="slot"><div class="card"><img src="media/ארגז-כלים/חומר-רצפה.webp" alt=""><div class="lbl">חומר</div><p class="small">בקומת הקרקע רקע חומרי שקט וניטרלי של רצפה יצוקה בגוון חול חם ועץ טבעי המאפשרים לעבודות החוטים ולטקסטיל להפוך למוקד המרכזי בחלל</p></div></div>
+      <div class="slot"><div class="card"><img src="media/ארגז-כלים/חומר-רצפה-גוון-17.11.webp" alt=""><div class="lbl">חומר</div><p class="small">בקומת הקרקע רקע חומרי שקט וניטרלי של רצפה יצוקה בגוון חול חם ועץ טבעי המאפשרים לעבודות החוטים ולטקסטיל להפוך למוקד המרכזי בחלל</p></div></div>
       <div class="slot"><div class="card"><img src="media/film/tool-4.webp" alt=""><div class="lbl">אור וצל</div><p class="small">האור פועל כחומר נוסף במרחב. דרך מסננים, טקסטילים וצמחייה נוצרים דפוסים משתנים של אור וצל, שמזכירים אריגה</p></div></div>
       <div class="slot"><div class="card"><img src="media/film/tool-3.webp" alt=""><div class="lbl">שכבות וסינון</div><p class="small">מחיצות, וילונות ואלמנטים חצי שקופים מייצרים שכבות של מבט, אור ופרטיות, ויוצרים איזון בין חיבור להפרדה</p></div></div>
       <div class="slot"><div class="card"><img src="media/film/tool-2.webp" alt=""><div class="lbl">חיבור אנכי</div><p class="small">גרם המדרגות ורצועת האור הצרה שנפתחת בין הקומות מחברים את שתי הדירות לבית אחד, רציף ומחובר</p></div></div>
@@ -614,6 +640,24 @@ if (!document.documentElement.classList.contains('edit') && matchMedia('(max-wid
   </div>
 </div></section>
 
+<section class="scene s-mat" id="s-mat" data-ch="2" style="--acc:var(--oak)"><div class="sk">
+  <div class="wrap"><header class="hd"><div class="ch rv">פרק ב · הרעיון</div><h2 class="rv">חומרי הבית</h2><div class="rule rv"></div><p class="small lead rv">שתי וערב: חומרים חמים ורכים, אלון, טיח בגוון חול ונגיעות של טרקוטה, מרווה וחרדל.</p></header>
+    <div class="pal rv"><div style="background:#E2D8C8"><span>חול</span></div><div style="background:#C29266"><span>אלון</span></div><div style="background:#A3AD90"><span>מרווה</span></div><div style="background:#B4623E"><span>טרקוטה</span></div><div style="background:#C79A3A"><span>חרדל</span></div><div style="background:#3E5568"><span>כחול עמוק</span></div><div style="background:#2B2622"><span>שחור מט</span></div></div>
+    <div class="mats rv"><figure><img src="media/חומרים/r1.jpg" alt=""><figcaption><b>רצפה יצוקה בגוון חול חם</b><span>כל קומת הקרקע</span></figcaption></figure><figure><img src="media/חומרים/r2.jpg" alt=""><figcaption><b>פרקט אלון בהנחת דגים</b><span>חדרי השינה</span></figcaption></figure><figure><img src="media/חומרים/r3.jpg" alt=""><figcaption><b>טרצו בגוון חול</b><span>שירותי האורחים, הרחצה ליד הכביסה</span></figcaption></figure><figure><img src="media/חומרים/r4.jpg" alt=""><figcaption><b>טרצו טרקוטה</b><span>רחצת ההורים והמרפסת</span></figcaption></figure><figure><img src="media/חומרים/k-stairs.jpg" alt=""><figcaption><b>רפפות אלון</b><span>גרם המדרגות</span></figcaption></figure><figure><img src="media/חומרים/bath-tiles.jpg" alt=""><figcaption><b>אריח מחורץ בזיגוג יד</b><span>כחול עמוק ושמנת, רחצת ההורים</span></figcaption></figure><figure><img src="media/חומרים/k-screen.jpg" alt=""><figcaption><b>מקרמה במסגרת אלון</b><span>המחיצה לסטודיו</span></figcaption></figure><figure><img src="media/חומרים/k-noya-panel.jpg" alt=""><figcaption><b>פאנל מחורץ בטרקוטה</b><span>קיר המיטה של נויה</span></figcaption></figure></div>
+  </div>
+</div></section>
+<section class="scene s-thread alt" id="s-thread" data-ch="2" style="--acc:var(--terracotta);--bgimg:url(media/film/tool-5.webp)"><div class="sk">
+  <div class="wrap">
+    <header class="hd"><div class="ch rv">פרק ב · הרעיון</div><h2 class="rv">החוט כחומר אדריכלי</h2><div class="rule rv"></div><p class="lead rv">אותו חומר מקבל בבית תפקידים שונים – מיצירה ואובייקט ועד מחיצה, סינון אור ותאורה.</p></header>
+    <div class="txt glass items">
+      <div class="it rv"><div class="lbl">מחיצה</div><p class="small">החוט מגדיר גבול בלי לסגור אותו. מקרמה במסגרות אלון בין הסלון לסטודיו, והטלוויזיה באמצע</p></div>
+      <div class="it rv"><div class="lbl">יצירה</div><p class="small">העבודה ברצועת האור הופכת את החוט למוקד אמנותי בקנה מידה גדול, הנצפה משתי הקומות</p></div>
+      <div class="it rv"><div class="lbl">אור</div><p class="small">גופי התאורה בבית, מעשה ידיה של קסם, מסננים את האור דרך סריגה בחוט, ויוצרים אווירה נעימה ומרככת בחלל</p></div>
+      <div class="it rv"><div class="lbl">מקור</div><p class="small">הסטודיו הוא המקום בו החומר, תהליך העבודה והיצירה נוכחים כחלק מחיי היומיום של הבית</p></div>
+    </div>
+    <figure class="media rv"><video class="loop" src="media/חוט/מחיצת-חבלים-התרחקות.mp4" poster="media/חוט/מחיצת-חבלים-התרחקות.jpg" muted playsinline preload="auto"></video></figure>
+  </div>
+</div></section>
 <section class="scene s-life alt" id="s-life" data-ch="2" style="--acc:var(--raffia);--bgimg:url(media/film/tool-1.webp)"><div class="sk">
   <div class="wrap">
     <header class="hd"><div class="ch rv">פרק ב · הרעיון</div><h2 class="rv">הבית כמארג חיים</h2><div class="rule rv"></div><div class="en rv">Qualitative Program</div><div class="en rv sub2">(פרוגרמה איכותית)</div><p class="lead rv">הבית מהווה נקודת מפגש בין יצירה, עבודה, משפחה ומנוחה</p></header>
@@ -642,31 +686,19 @@ if (!document.documentElement.classList.contains('edit') && matchMedia('(max-wid
   </div>
 </div></section>
 
-<section class="scene s-thread alt" id="s-thread" data-ch="3" style="--acc:var(--terracotta);--bgimg:url(media/film/tool-5.webp)"><div class="sk">
-  <div class="wrap">
-    <header class="hd"><div class="ch rv">פרק ג · החומר</div><h2 class="rv">החוט כחומר אדריכלי</h2><div class="rule rv"></div><p class="lead rv">אותו חומר מקבל בבית תפקידים שונים – מיצירה ואובייקט ועד מחיצה, סינון אור ותאורה.</p></header>
-    <div class="txt glass items">
-      <div class="it rv"><div class="lbl">מחיצה</div><p class="small">החוט מגדיר גבול בלי לסגור אותו. מקרמה במסגרות אלון בין הסלון לסטודיו, והטלוויזיה באמצע</p></div>
-      <div class="it rv"><div class="lbl">יצירה</div><p class="small">העבודה ברצועת האור הופכת את החוט למוקד אמנותי בקנה מידה גדול, הנצפה משתי הקומות</p></div>
-      <div class="it rv"><div class="lbl">אור</div><p class="small">גופי התאורה בבית, מעשה ידיה של קסם, מסננים את האור דרך סריגה בחוט, ויוצרים אווירה נעימה ומרככת בחלל</p></div>
-      <div class="it rv"><div class="lbl">מקור</div><p class="small">הסטודיו הוא המקום בו החומר, תהליך העבודה והיצירה נוכחים כחלק מחיי היומיום של הבית</p></div>
-    </div>
-    <figure class="media rv"><video class="loop" src="media/חוט/מחיצת-חבלים-התרחקות.mp4" poster="media/חוט/מחיצת-חבלים-התרחקות.jpg" muted playsinline preload="auto"></video></figure>
-  </div>
-</div></section>
 
-<section class="scene s-plan" id="s-plan-gf" data-ch="4" style="--acc:var(--oak)"><div class="sk">
-  <div class="wrap"><header class="hd"><div class="ch rv">פרק ד · התכנון</div><h2 class="rv">תוכנית קומת קרקע</h2><span class="north rv" aria-label="צפון"><svg viewBox="0 0 46 46"><circle cx="23" cy="23" r="21" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M23 5L31 37L23 31L15 37Z" fill="currentColor"/></svg></span><div class="rule rv"></div><div class="en rv">Ground Floor Plan</div></header>
+<section class="scene s-plan" id="s-plan-gf" data-ch="3" style="--acc:var(--oak)"><div class="sk">
+  <div class="wrap"><header class="hd"><div class="ch rv">פרק ג · התכנון</div><h2 class="rv">תוכנית קומת קרקע</h2><span class="north rv" aria-label="צפון"><svg viewBox="0 0 46 46"><circle cx="23" cy="23" r="21" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M23 5L31 37L23 31L15 37Z" fill="currentColor"/></svg></span><div class="rule rv"></div><div class="en rv">Ground Floor Plan</div></header>
     <div class="plan rv"><img src="media/תכנית-העמדה/תכנית-קרקע-מצגת.png" alt=""></div></div>
 </div></section>
-<section class="scene s-plan" id="s-plan-f1" data-ch="4" style="--acc:var(--oak)"><div class="sk">
-  <div class="wrap"><header class="hd"><div class="ch rv">פרק ד · התכנון</div><h2 class="rv">תוכנית קומה א'</h2><span class="north rv" aria-label="צפון"><svg viewBox="0 0 46 46"><circle cx="23" cy="23" r="21" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M23 5L31 37L23 31L15 37Z" fill="currentColor"/></svg></span><div class="rule rv"></div><div class="en rv">First Floor Plan</div></header>
+<section class="scene s-plan" id="s-plan-f1" data-ch="3" style="--acc:var(--oak)"><div class="sk">
+  <div class="wrap"><header class="hd"><div class="ch rv">פרק ג · התכנון</div><h2 class="rv">תוכנית קומה א'</h2><span class="north rv" aria-label="צפון"><svg viewBox="0 0 46 46"><circle cx="23" cy="23" r="21" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M23 5L31 37L23 31L15 37Z" fill="currentColor"/></svg></span><div class="rule rv"></div><div class="en rv">First Floor Plan</div></header>
     <div class="plan rv"><img src="media/תכנית-העמדה/תכנית-קומה-א-מצגת.png" alt=""></div></div>
 </div></section>
 
-<section class="scene s-loom alt" id="s-loom" data-ch="4" style="--acc:var(--oak)"><div class="sk">
+<section class="scene s-loom alt" id="s-loom" data-ch="3" style="--acc:var(--oak)"><div class="sk">
   <div class="wrap">
-    <header class="hd"><div class="ch rv">פרק ד · התכנון</div><h2 class="rv">הנול<small>המודל החי שנבנה מתוך התוכנית האדריכלית</small></h2><div class="rule rv"></div></header>
+    <header class="hd"><div class="ch rv">פרק ג · התכנון</div><h2 class="rv">הנול<small>המודל החי שנבנה מתוך התוכנית האדריכלית</small></h2><div class="rule rv"></div></header>
     <div class="txt glass">
       <p class="body rv">המודל נבנה בקוד, ישירות מתוך קובץ האוטוקאד. כל קיר, פתח ומפלס נקרא מהשרטוט, שואב את הגיאומטריה המדויקת מתוך התוכנית האדריכלית ואת העיצוב המדויק (צבעים, טקסטורות, ריהוט, נגרויות וכו׳) מתוך היכרות מעמיקה עם הפרויקט ובריף עיצובי מדויק.</p>
       <p class="body rv">באמצעות המודל החי ניתן לערוך סיור בתוך המודל, להיכנס לכל חדר, לעמוד בו ולבדוק אותו, לפני שמשהו נבנה.</p>
@@ -683,53 +715,58 @@ if (!document.documentElement.classList.contains('edit') && matchMedia('(max-wid
   </div>
 </div></section>
 
-<section class="scene s-tour s-vid" id="s-vid-a" data-ch="4" style="--acc:var(--sage)"><div class="sk">
+
+<section class="scene s-tour s-vid" id="s-vid-a" data-ch="3" style="--acc:var(--sage)"><div class="sk">
   <div class="wrap">
-    <div class="ttl"><small>פרק ד · התכנון</small>תהליך העבודה - בניית מודל בתלת מימד</div>
-    <div class="vbox"><video src="media/סרטון-א-16.11.mp4" poster="media/סרטון-א-16.11.jpg" playsinline preload="metadata"></video><div class="play"><span></span></div></div>
+    <div class="ttl"><small>פרק ג · התכנון</small>תהליך העבודה - בניית מודל בתלת מימד</div>
+    <div class="vbox"><video src="media/סרטון-א-מוזיקה-16.11.mp4" poster="media/סרטון-א-מוזיקה-16.11.jpg" playsinline preload="metadata"></video><div class="play"><span></span></div></div>
+  </div>
+</div></section>
+<section class="scene s-loom s-live alt" id="s-live" data-ch="3" style="--acc:var(--oak)"><div class="sk">
+  <div class="wrap">
+    <header class="hd"><div class="ch rv">פרק ג · התכנון</div><h2 class="rv">המודל החי<small>הבית כולו, כפי שנבנה מתוך קובץ האוטוקאד</small></h2><div class="rule rv"></div></header>
+    <div class="txt glass">
+      <p class="body rv">כאן פותחים את המודל, מסובבים אותו ונכנסים לכל חדר.</p>
+      <p class="mlinkp rv"><a class="mlink mbtn" href="model.html" target="_blank" tabindex="-1" rel="noopener">לפתיחת המודל החי<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5 11L11 5M6 5h5v5"/></svg></a></p>
+    </div>
+    <figure class="media loomfig rv"><div class="stage"><img src="media/מודל-חי/מודל-חי-מבחוץ.webp" alt="המודל החי מבחוץ"></div></figure>
   </div>
 </div></section>
 
-<section class="scene s-plan" id="s-section-aa" data-ch="4" style="--acc:var(--oak)"><div class="sk">
-  <div class="wrap"><header class="hd"><div class="ch rv">פרק ד · התכנון</div><h2 class="rv">חתך א-א<small>לאורך רצועת האור, מבט צפונה אל המטבח</small></h2><div class="rule rv"></div></header>
-    <div class="plan rv"><img src="media/חתכים-מצגת-15.11/חתך-א-א.png" data-split="0.7092" alt=""></div></div>
-</div></section>
-<section class="scene s-plan" id="s-section-bb" data-ch="4" style="--acc:var(--oak)"><div class="sk">
-  <div class="wrap"><header class="hd"><div class="ch rv">פרק ד · התכנון</div><h2 class="rv">חתך ב-ב<small>הכניסה ורצועת האור, מבט דרומה</small></h2><div class="rule rv"></div><div class="nums rv">2.82 · 5.99 · 1.38</div><p class="small rv">השתי, הציר האנכי: גרם המדרגות, ורצועת אור צרה בגובה 5.99 מטר שנפתחת בין הקומות בכניסה לבית. על הקיר שבתוכה עבודת חוטים אחת של קסם, הנקראת משתי הקומות</p><p class="small rv">הניגוד מכוון: רגע אחד גבוה, צר ודרמטי שמכריז על הבית, ולידו מרחב נמוך ורחב שבו באמת חיים</p></header>
-    <div class="plan rv"><img src="media/חתכים-מצגת-15.11/חתך-ב-ב.png" data-split="0.7091" alt=""></div></div>
-</div></section>
-<section class="scene s-plan" id="s-section-cc" data-ch="4" style="--acc:var(--oak)"><div class="sk">
-  <div class="wrap"><header class="hd"><div class="ch rv">פרק ד · התכנון</div><h2 class="rv">חתך ג-ג<small>דרך העמוד והמרפסת, מבט מערבה</small></h2><div class="rule rv"></div></header>
-    <div class="plan rv"><img src="media/חתכים-מצגת-15.11/חתך-ג-ג.png" data-split="0.7057" alt=""></div></div>
-</div></section>
-<section class="scene s-plan" id="s-section-dd" data-ch="4" style="--acc:var(--oak)"><div class="sk">
-  <div class="wrap"><header class="hd"><div class="ch rv">פרק ד · התכנון</div><h2 class="rv">חתך ד-ד</h2><div class="rule rv"></div></header>
-    <div class="plan rv"><img src="media/חתכים-מצגת-15.11/חתך-ד-ד.png" data-split="0.7099" alt=""></div></div>
-</div></section>
-<section class="scene s-tour s-vid" id="s-vid-b" data-ch="4" style="--acc:var(--sage)"><div class="sk">
+<section class="scene s-tour s-vid" id="s-vid-b" data-ch="3" style="--acc:var(--sage)"><div class="sk">
   <div class="wrap">
-    <div class="ttl"><small>פרק ד · התכנון</small>תהליך העבודה - הפקת תוכניות עבודה</div>
-    <div class="vbox"><video src="media/סרטון-ב-16.11.mp4" poster="media/סרטון-ב-16.11.jpg" playsinline preload="metadata"></video><div class="play"><span></span></div></div>
+    <div class="ttl"><small>פרק ג · התכנון</small>תהליך העבודה - הפקת תוכניות עבודה</div>
+    <div class="vbox"><video src="media/סרטון-ב-מוזיקה-16.11.mp4" poster="media/סרטון-ב-מוזיקה-16.11.jpg" playsinline preload="metadata"></video><div class="play"><span></span></div></div>
   </div>
+</div></section>
+<section class="scene s-plan" id="s-section-aa" data-ch="3" style="--acc:var(--oak)"><div class="sk">
+  <div class="wrap"><header class="hd"><div class="ch rv">פרק ג · התכנון</div><h2 class="rv">חתך א-א<small>לאורך רצועת האור, מבט צפונה אל המטבח</small></h2><div class="rule rv"></div></header>
+    <div class="plan rv"><img src="media/חתכים-מצגת-17.11/חתך-א-א.png" data-split="0.7092" alt=""></div></div>
+</div></section>
+<section class="scene s-plan" id="s-section-bb" data-ch="3" style="--acc:var(--oak)"><div class="sk">
+  <div class="wrap"><header class="hd"><div class="ch rv">פרק ג · התכנון</div><h2 class="rv">חתך ב-ב<small>הכניסה ורצועת האור, מבט דרומה</small></h2><div class="rule rv"></div><div class="nums rv">2.82 · 5.99 · 1.38</div><p class="small rv">השתי, הציר האנכי: גרם המדרגות, ורצועת אור צרה בגובה 5.99 מטר שנפתחת בין הקומות בכניסה לבית. על הקיר שבתוכה עבודת חוטים אחת של קסם, הנקראת משתי הקומות</p><p class="small rv">הניגוד מכוון: רגע אחד גבוה, צר ודרמטי שמכריז על הבית, ולידו מרחב נמוך ורחב שבו באמת חיים</p></header>
+    <div class="plan rv"><img src="media/חתכים-מצגת-17.11/חתך-ב-ב.png" data-split="0.7091" alt=""></div></div>
+</div></section>
+<section class="scene s-plan" id="s-section-cc" data-ch="3" style="--acc:var(--oak)"><div class="sk">
+  <div class="wrap"><header class="hd"><div class="ch rv">פרק ג · התכנון</div><h2 class="rv">חתך ג-ג<small>דרך העמוד והמרפסת, מבט מערבה</small></h2><div class="rule rv"></div></header>
+    <div class="plan rv"><img src="media/חתכים-מצגת-17.11/חתך-ג-ג.png" data-split="0.7057" alt=""></div></div>
+</div></section>
+<section class="scene s-plan" id="s-section-dd" data-ch="3" style="--acc:var(--oak)"><div class="sk">
+  <div class="wrap"><header class="hd"><div class="ch rv">פרק ג · התכנון</div><h2 class="rv">חתך ד-ד</h2><div class="rule rv"></div></header>
+    <div class="plan rv"><img src="media/חתכים-מצגת-17.11/חתך-ד-ד.png" data-split="0.7099" alt=""></div></div>
 </div></section>
 
-<section class="scene s-mat" id="s-mat" data-ch="5" style="--acc:var(--oak)"><div class="sk">
-  <div class="wrap"><header class="hd"><div class="ch rv">פרק ה · הבית</div><h2 class="rv">חומרי הבית</h2><div class="rule rv"></div><p class="small lead rv">שתי וערב: חומרים חמים ורכים, אלון, טיח בגוון חול ונגיעות של טרקוטה, מרווה וחרדל.</p></header>
-    <div class="pal rv"><div style="background:#E2D8C8"><span>חול</span></div><div style="background:#C29266"><span>אלון</span></div><div style="background:#A3AD90"><span>מרווה</span></div><div style="background:#B4623E"><span>טרקוטה</span></div><div style="background:#C79A3A"><span>חרדל</span></div><div style="background:#3E5568"><span>כחול עמוק</span></div><div style="background:#2B2622"><span>שחור מט</span></div></div>
-    <div class="mats rv"><figure><img src="media/חומרים/r1.jpg" alt=""><figcaption><b>רצפה יצוקה בגוון חול חם</b><span>כל קומת הקרקע</span></figcaption></figure><figure><img src="media/חומרים/r2.jpg" alt=""><figcaption><b>פרקט אלון בהנחת דגים</b><span>חדרי השינה</span></figcaption></figure><figure><img src="media/חומרים/r3.jpg" alt=""><figcaption><b>טרצו בגוון חול</b><span>שירותי האורחים, הרחצה ליד הכביסה</span></figcaption></figure><figure><img src="media/חומרים/r4.jpg" alt=""><figcaption><b>טרצו טרקוטה</b><span>רחצת ההורים והמרפסת</span></figcaption></figure><figure><img src="media/חומרים/k-stairs.jpg" alt=""><figcaption><b>רפפות אלון</b><span>גרם המדרגות</span></figcaption></figure><figure><img src="media/חומרים/bath-tiles.jpg" alt=""><figcaption><b>אריח מחורץ בזיגוג יד</b><span>כחול עמוק ושמנת, רחצת ההורים</span></figcaption></figure><figure><img src="media/חומרים/k-screen.jpg" alt=""><figcaption><b>מקרמה במסגרת אלון</b><span>המחיצה לסטודיו</span></figcaption></figure><figure><img src="media/חומרים/k-noya-panel.jpg" alt=""><figcaption><b>פאנל מחורץ בטרקוטה</b><span>קיר המיטה של נויה</span></figcaption></figure></div>
-  </div>
-</div></section>
-<section class="scene s-tour" id="s-tour" data-ch="5" style="--acc:var(--sage)"><div class="sk">
+<section class="scene s-tour" id="s-tour" data-ch="4" style="--acc:var(--sage)"><div class="sk">
   <div class="wrap">
-    <div class="ttl"><small>פרק ה · הבית</small>תהליך העבודה - סיור בבית והדמיות</div>
+    <div class="ttl"><small>פרק ד · הבית</small>תהליך העבודה - סיור בבית והדמיות</div>
     <div class="vbox">
-      <video id="tour" src="media/סרטון-ד-16.11.mp4" poster="media/סרטון-ד-16.11.jpg" playsinline preload="metadata"></video>
+      <video id="tour" src="media/סרטון-ד-עם-סיום-מוזיקה-16.11.mp4" poster="media/סרטון-ד-עם-סיום-מוזיקה-16.11.jpg" playsinline preload="metadata"></video>
       <div class="play" id="play"><span></span></div>
     </div>
   </div>
 </div></section>
 
-<section class="scene s-end" id="s-end" data-ch="5" style="--acc:var(--sage)"><div class="sk">
+<section class="scene s-end" id="s-end" data-ch="4" style="--acc:var(--sage)"><div class="sk">
   <video class="bg loop" src="media/קסם-סריגה.mp4" poster="media/קסם-סריגה.jpg" muted loop playsinline preload="metadata"></video>
   <div class="wrap"><div class="inner">
     <h2 class="rv">מתוך חוטים בודדים, בית אחד</h2>
@@ -976,19 +1013,20 @@ const LAND = [
   { x: 0.085, tip: 0.64, s: 1.00 },  // s-concept
   { x: 0.045, tip: 0.56, s: 0.80 },  // s-meet
   { x: 0.045, tip: 0.92, s: 0.80 },  // s-tools
+  { x: 0.045, tip: 0.42, s: 0.85 },  // s-mat
+  { x: 0.075, tip: 0.66, s: 0.95 },  // s-thread
   { x: 0.045, tip: 0.50, s: 0.80 },  // s-life
   { x: 0.045, tip: 0.54, s: 0.80 },  // s-prog
-  { x: 0.075, tip: 0.66, s: 0.95 },  // s-thread
   { x: 0.035, tip: 0.36, s: 0.80 },  // s-plan-gf
   { x: 0.035, tip: 0.36, s: 0.80 },  // s-plan-f1
   { x: 0.060, tip: 0.62, s: 0.90 },  // s-loom
   { x: 0.040, tip: 0.50, s: 0.85 },  // s-vid-a
+  { x: 0.060, tip: 0.62, s: 0.90 },  // s-live
+  { x: 0.040, tip: 0.50, s: 0.85 },  // s-vid-b
   { x: 0.045, tip: 0.42, s: 0.85 },  // s-section-aa
   { x: 0.045, tip: 0.42, s: 0.85 },  // s-section-bb
   { x: 0.045, tip: 0.42, s: 0.85 },  // s-section-cc
   { x: 0.045, tip: 0.42, s: 0.85 },  // s-section-dd
-  { x: 0.040, tip: 0.50, s: 0.85 },  // s-vid-b
-  { x: 0.045, tip: 0.42, s: 0.85 },  // s-mat
   { x: 0.040, tip: 0.50, s: 0.85 },  // s-tour
   { x: 0.500, tip: 0.46, s: 1.00 },  // s-end
 ];
@@ -1033,7 +1071,7 @@ gsap.ticker.add((time, dt) => {
 // ---- לשוניות, מקלדת וגלגלת: צעד אחד בכל פעם (ענת 8.11: הגלילה החופשית עברה כמה קטעים בתנופה אחת) ----
 // כל לחיצה או תנועת גלילה מעבירה קטע אחד בדיוק ונעצרת עליו. בזמן המעבר, ובזנב התנופה אחריו, תנועות נוספות נבלעות
 let moving = false, coolUntil = 0, acc = 0, lastWheel = 0;
-const goTo = id => { moving = true;
+const goTo = id => { moving = true; window.__goingTo = id;
   lenis.scrollTo(starts[id](), { duration: 1.6, easing: t => 1 - Math.pow(1 - t, 3), onComplete: () => { moving = false; coolUntil = performance.now() + 450; acc = 0; if (window.__flushKey) window.__flushKey(); } }); };
 const indexNow = () => { const pos = scenes.map(s => starts[s.id]()), y = lenis.scroll; let c = 0; pos.forEach((p, i) => { if (y >= p - 2) c = i; }); return c; };
 const step = d => { if (scenes[indexNow()].id === 's-members' && window.__memStep && window.__memStep(d)) { coolUntil = performance.now() + 160; acc = 0; return; }
@@ -1128,14 +1166,16 @@ document.querySelectorAll('.s-tour video').forEach(v => { const s = v.closest('.
 
 // ===== 16.11 קליקר: שכבות, סרטונים, מקשים, מסך שחור =====
 window.__build = (() => {
-  const L = { 's-family': ['.txt', '.media'], 's-insp': ['.txt', '.media'], 's-concept': ['.txt'],
+  // ענת 16.11 ערב: "בכל השקפים חוץ מהארגז כלים והנפשות במשפחה הכל צריך לעלות ביחד". השכבות כבויות (ALL_TOGETHER), הארגז והנפשות נשארים בקליקים שלהם
+  const ALL_TOGETHER = true;
+  const L = ALL_TOGETHER ? {} : { 's-family': ['.txt', '.media'], 's-insp': ['.txt', '.media'], 's-concept': ['.txt'],
     's-meet': ['.row3 .mc:nth-child(1)', '.row3 .mc:nth-child(2)', '.row3 .mc:nth-child(3)'],
     's-life': ['.nodes .nd'], 's-prog': ['.floors .fl:nth-child(1)', '.floors .fl:nth-child(2)'],
     's-thread': ['.txt', '.media'], 's-mat': ['.pal', '.mats'] };
   const IN = () => ({ opacity: 1, y: 0, duration: .9, stagger: .07, ease: 'power3.out', overwrite: true });
   const OUT = () => ({ opacity: 0, y: 28, duration: .4, overwrite: true });
   const st = {}, layers = s => (L[s.id] || []).map(q => [...s.querySelectorAll(q)].flatMap(e => [e, ...e.querySelectorAll('.rv')]));   // הבועה עצמה ופריטי הטקסט שבתוכה
-  const SEC = s => /^s-section/.test(s.id) && !!parseFloat((s.querySelector('.plan img') || {}).dataset?.split);
+  const SEC = s => !ALL_TOGETHER && /^s-section/.test(s.id) && !!parseFloat((s.querySelector('.plan img') || {}).dataset?.split);
   // החתך: גוזרים את התמונה עד הרווח שלפני התכניות הקטנות. בגודל הפריסה (בלי ההגדלה של המעבר), לפי השטח שהציור תופס בפועל
   const clip = (s, closed, anim) => { const im = s.querySelector('.plan img'), f = parseFloat(im.dataset.split);
     if (!anim) im.style.transition = 'none';
@@ -1192,6 +1232,76 @@ window.__vid = (() => {
   }, true);
   document.addEventListener('click', e => { const a = e.target.closest && e.target.closest('a'); if (a) setTimeout(() => a.blur(), 0); });
 }
+// 17.11: שינוי גודל החלון (F5, כניסה ויציאה ממסך מלא) הזיז את מקומות השקפים, והדף נשאר בין שניים. עכשיו חוזרים לשקף שהיינו בו.
+// השקף נקבע בתחילת השינוי (המקומות עוד הישנים), והיישור אחרי שהאתר חישב מחדש (ScrollTrigger refresh), ושוב אחרי שהכל נרגע
+{ let keep = null, t1 = 0;
+  // 17.11 ערב: לפני היישור Lenis מחשב מחדש את אורך הדף. אחרת הוא חוסם את הגלילה באורך הישן, והשקפים האחרונים (הסיום) נעצרים באמצע
+  const snap = () => { if (!keep) return; const id = keep; if (lenis.resize) lenis.resize(); const y = starts[id]();
+    lenis.scrollTo(y, { immediate: true, force: true }); if (Math.abs(scrollY - y) > 2) { scrollTo(0, y); if (lenis.resize) lenis.resize(); lenis.scrollTo(y, { immediate: true, force: true }); } ScrollTrigger.update(); };
+  // רק אחרי שהדף נרגע: שינויי גודל בזמן הטעינה (ומעבר ישיר לשקף עם ?s=) לא נתפסים, אחרת הם מחזירים לשער
+  let ready = 0; addEventListener('load', () => setTimeout(() => { ready = 1; }, 2500));
+  addEventListener('resize', () => { if (!ready) return; if (!keep) keep = (moving && window.__goingTo) || scenes[indexNow()].id;
+    clearTimeout(t1); t1 = setTimeout(() => { snap(); keep = null; }, 900); }, true);
+  // 17.11 ערב: כשהמעבר למסך מלא איטי, האתר מחשב מחדש גם אחרי שהשמירה שוחררה, והדף נשאר קצת מעל, על השקף הקודם.
+  // לכן כל חישוב מחדש (refresh) זוכר את השקף שעל המסך לפניו (המקומות עוד הישנים) וחוזר אליו אחריו
+  let pend = null;
+  ScrollTrigger.addEventListener('refreshInit', () => { if (ready && !keep && !moving) pend = scenes[indexNow()].id; });
+  ScrollTrigger.addEventListener('refresh', () => { if (!keep && pend) { keep = pend; snap(); keep = null; } pend = null; snap(); });
+  window.__resizeKeep = () => keep || pend;
+  window.__sceneOffset = () => { const s = scenes[indexNow()]; return { id: s.id, d: Math.round(lenis.scroll - starts[s.id]()) }; }; }
+
+// ===== 17.11 גרסה א: פקדים לסרטונים. עכבר: עצירה והמשך, 10 שנ' אחורה וקדימה, פס זמן לגרירה, מהירות.
+// הקליקר לא משתנה: רווח, חיצים, PageDown ו-Enter ממשיכים כמו קודם. במקלדת (לפי מיקום המקש, גם בעברית): K עוצר וממשיך, J ו-L עשר שניות, [ ו-] מהירות =====
+window.__vctl = (() => {
+  const SP = [0.5, 0.75, 1, 1.25, 1.5, 2];
+  const fmt = t => { t = Math.max(0, Math.floor(t || 0)); return Math.floor(t / 60) + ':' + String(t % 60).padStart(2, '0'); };
+  const ICON = { pp: '<svg viewBox="0 0 20 20"><path class="i-play" d="M6 3.5l11 6.5-11 6.5z"/><path class="i-pause" d="M7 4v12M13 4v12"/></svg>',
+    back: '<svg viewBox="0 0 20 20"><path d="M10 5l-6 5 6 5M16 5l-6 5 6 5"/></svg>', fwd: '<svg viewBox="0 0 20 20"><path d="M4 5l6 5-6 5M10 5l6 5-6 5"/></svg>' };
+  const boxes = gsap.utils.toArray('.s-tour .vbox').map(box => {
+    const v = box.querySelector('video'), bar = document.createElement('div'); bar.className = 'vctl';
+    bar.innerHTML = `<button class="vb" data-a="pp" aria-label="עצירה והמשך">${ICON.pp}</button><button class="vb" data-a="back" aria-label="10 שניות אחורה">${ICON.back}</button>`
+      + `<button class="vb" data-a="fwd" aria-label="10 שניות קדימה">${ICON.fwd}</button><span class="tm"><b>0:00</b> / <i>0:00</i></span>`
+      + `<div class="trk"><div class="fill"></div><div class="knob"></div></div><button class="vb sp" data-a="sp" aria-label="מהירות">1×</button>`;
+    bar.querySelectorAll('button').forEach(b => { b.type = 'button'; b.tabIndex = -1; });
+    box.appendChild(bar);
+    const tm = bar.querySelector('.tm b'), du = bar.querySelector('.tm i'), fill = bar.querySelector('.fill'), knob = bar.querySelector('.knob'), trk = bar.querySelector('.trk'), sp = bar.querySelector('.sp');
+    let timer = 0, drag = false;
+    const started = () => !v.paused || v.currentTime > .05;
+    const draw = () => { const d = v.duration || 0, f = d ? Math.min(1, v.currentTime / d) : 0;
+      tm.textContent = fmt(v.currentTime); du.textContent = fmt(d); fill.style.width = knob.style.left = (f * 100).toFixed(2) + '%';
+      sp.textContent = String(v.playbackRate).replace(/^0\./, '.') + '×'; box.classList.toggle('vplaying', !v.paused); };
+    const vis = on => { box.classList.toggle('ctl', on && started()); box.classList.toggle('idle', !on && !v.paused); };
+    const poke = () => { vis(true); clearTimeout(timer); timer = setTimeout(() => { if (!drag && !v.paused) vis(false); }, 2200); };
+    ['timeupdate', 'seeked', 'loadedmetadata', 'durationchange', 'ratechange', 'play', 'pause', 'ended'].forEach(ev => v.addEventListener(ev, draw));
+    v.addEventListener('play', () => { clearTimeout(timer); timer = setTimeout(() => { if (!drag && !v.paused) vis(false); }, 1200); });
+    v.addEventListener('pause', () => { if (!v.ended && v.currentTime > .05) vis(true); });
+    v.addEventListener('ended', () => vis(false));
+    box.addEventListener('mousemove', poke); box.addEventListener('mouseleave', () => { if (!drag && !v.paused) vis(false); });
+    const act = a => { const d = v.duration || 0;
+      if (a === 'pp') { if (v.paused) { v.muted = false; v.play().catch(() => {}); } else v.pause(); }
+      else if (a === 'back') v.currentTime = Math.max(0, v.currentTime - 10);
+      else if (a === 'fwd') v.currentTime = Math.min(Math.max(0, d - .1), v.currentTime + 10);
+      else if (a === 'faster' || a === 'slower' || a === 'sp') { const i = SP.indexOf(v.playbackRate), k = i < 0 ? 2 : i;
+        v.playbackRate = a === 'slower' ? SP[Math.max(0, k - 1)] : a === 'faster' ? SP[Math.min(SP.length - 1, k + 1)] : SP[(k + 1) % SP.length]; }
+      draw(); poke(); };
+    // לחיצה על הפס לא מגיעה לסרטון, לא לוקחת פוקוס ולא מזיזה שקף
+    bar.addEventListener('pointerdown', e => { e.stopPropagation(); if (e.target.closest('button')) e.preventDefault(); });
+    bar.addEventListener('click', e => { e.stopPropagation(); const b = e.target.closest('button'); if (b) act(b.dataset.a); });
+    bar.addEventListener('wheel', e => e.stopPropagation(), { passive: true });
+    const seek = e => { const r = trk.getBoundingClientRect(), f = Math.max(0, Math.min(1, (e.clientX - r.left) / r.width)); if (v.duration) v.currentTime = f * v.duration; draw(); };
+    trk.addEventListener('pointerdown', e => { e.preventDefault(); drag = true; trk.classList.add('drag'); trk.setPointerCapture(e.pointerId); seek(e); poke(); });
+    trk.addEventListener('pointermove', e => { if (drag) { seek(e); poke(); } });
+    const up = e => { if (!drag) return; drag = false; trk.classList.remove('drag'); try { trk.releasePointerCapture(e.pointerId); } catch (_) {} poke(); };
+    trk.addEventListener('pointerup', up); trk.addEventListener('pointercancel', up);
+    draw();
+    return { box, v, act };
+  });
+  const KEYS = { KeyK: 'pp', KeyJ: 'back', KeyL: 'fwd', BracketLeft: 'slower', BracketRight: 'faster' };
+  addEventListener('keydown', e => { if (e.ctrlKey || e.metaKey || e.altKey || !KEYS[e.code]) return;
+    const s = scenes[indexNow()], o = s && boxes.find(o => s.contains(o.box)); if (!o) return;
+    e.preventDefault(); e.stopImmediatePropagation(); if (e.repeat && e.code === 'KeyK') return; o.act(KEYS[e.code]); }, true);
+  return { boxes, state: id => { const o = boxes.find(o => o.box.closest('.scene').id === id); return o && { t: +o.v.currentTime.toFixed(2), rate: o.v.playbackRate, paused: o.v.paused, ctl: o.box.classList.contains('ctl') }; } };
+})();
 window.__pres = { state() { const s = scenes[indexNow()]; return { scene: s.id, build: window.__build.state(s) + '/' + window.__build.count(s),
   mem: s.id === 's-members' && window.__memState ? window.__memState() : undefined, tool: s.id === 's-tools' && window.__toolState ? window.__toolState() : undefined,
   loom: s.id === 's-loom' && window.__loomState ? window.__loomState() : undefined, video: window.__vid.state(s) || undefined, moving }; } };
@@ -1219,7 +1329,8 @@ const POSES = {
   's-thread': { kind: 'frame', sel: '.media' },
   // ענת 15.11: מסגרת עליונה. בתוכנית הראשונה למעלה ויורד בקצה השמאלי, בבאה ממשיך מהפינה השמאלית העליונה ימינה ויורד בקצה הימני
   's-plan-gf':{ kind: 'topL', sel: 'h2', rule: true }, 's-plan-f1':{ kind: 'topR', sel: 'h2', rule: true },
-  's-loom':   { kind: 'frame', sel: '.stage', sel2: '#steps' },   // ענת 15.11: מתחת לשורת הכיתוב
+  's-loom':   { kind: 'frame', sel: '.stage', sel2: '#steps' },
+  's-live':   { kind: 'frame', sel: '.stage' },   // ענת 15.11: מתחת לשורת הכיתוב
   // ענת 15.11 ערב: בחתכים החוט "קצת מפריע". רק עובר מלמעלה למטה בשוליים השמאליים, רחוק מהכותרת, וכל חתך ממשיך בדיוק מהקודם
   's-section-aa':{ kind: 'side' }, 's-section-bb':{ kind: 'side' },
   's-section-cc':{ kind: 'side' }, 's-section-dd':{ kind: 'side' },
@@ -1236,7 +1347,7 @@ const off = document.createElement('canvas'), ox = off.getContext('2d');
 let W = 0, H = 0, DPR = 1;
 function size(){ DPR = Math.min(2, devicePixelRatio || 1); W = innerWidth; H = innerHeight;
   cv.width = off.width = W * DPR; cv.height = off.height = H * DPR; }
-addEventListener('resize', size); size();
+addEventListener('resize', size); document.addEventListener('fullscreenchange', size); size();
 
 const tile = new Image(); tile.src = 'media/מבחן-חוט/חוט.png';
 const TW = 32, TH = 1000, THREAD_W = 9;
@@ -1400,7 +1511,9 @@ function draw(now){
   const dt = Math.min(80, now - last); last = now;
   if (!scenes.length) { requestAnimationFrame(draw); return; }
   if (prog.length !== scenes.length) prog = scenes.map(() => 0);
-  const f = Math.max(0, win.scrollY / (H || 1)), c = Math.min(scenes.length - 1, Math.round(f));
+  // 17.11 ערב: בזמן שינוי גודל (מסך מלא) החוט נשאר על השקף שהיה על המסך
+  const kp = window.__resizeKeep && window.__resizeKeep(), ki = kp ? scenes.findIndex(s => s.id === kp) : -1;
+  const f = Math.max(0, win.scrollY / (H || 1)), c = ki >= 0 ? ki : Math.min(scenes.length - 1, Math.round(f));
   // ענת 15.11 ערב: החוט הקודם לא עולה למעלה. הוא דועך במקום, והחוט של השקף החדש מצטייר בצורה שלו
   if (alpha.length !== scenes.length) alpha = scenes.map(() => 0);
   for (let i = 0; i < scenes.length; i++) {
