@@ -1240,7 +1240,17 @@ window.__vid = (() => {
     lenis.scrollTo(y, { immediate: true, force: true }); if (Math.abs(scrollY - y) > 2) { scrollTo(0, y); if (lenis.resize) lenis.resize(); lenis.scrollTo(y, { immediate: true, force: true }); } ScrollTrigger.update(); };
   // רק אחרי שהדף נרגע: שינויי גודל בזמן הטעינה (ומעבר ישיר לשקף עם ?s=) לא נתפסים, אחרת הם מחזירים לשער
   let ready = 0; addEventListener('load', () => setTimeout(() => { ready = 1; }, 2500));
-  addEventListener('resize', () => { if (!ready) return; if (!keep) keep = (moving && window.__goingTo) || scenes[indexNow()].id;
+  // 17.11 לילה (ענת במק, מסך מלא אמיתי: פס בהיר בתחתית כל שקף): ScrollTrigger מתעלם בכוונה מכל שינוי גודל כשהדף במסך מלא
+  // (document.fullscreenElement), ולכן השקפים הנעוצים נשארו בגובה החלון שלפני המסך המלא. כאן מחשבים מחדש בעצמנו,
+  // בכניסה וביציאה ממסך מלא ובכל שינוי גודל בזמן מסך מלא, ואז חוזרים לשקף
+  const isFS = () => !!(document.fullscreenElement || document.webkitFullscreenElement);
+  let t2 = 0, t3 = 0;
+  const fsRefresh = () => { if (!keep) keep = (moving && window.__goingTo) || scenes[indexNow()].id;
+    clearTimeout(t2); clearTimeout(t3); clearTimeout(t1);
+    t2 = setTimeout(() => ScrollTrigger.refresh(), 250);
+    t3 = setTimeout(() => { ScrollTrigger.refresh(); snap(); keep = null; }, 1000); };
+  document.addEventListener('fullscreenchange', fsRefresh); document.addEventListener('webkitfullscreenchange', fsRefresh);
+  addEventListener('resize', () => { if (isFS()) { fsRefresh(); return; } if (!ready) return; if (!keep) keep = (moving && window.__goingTo) || scenes[indexNow()].id;
     clearTimeout(t1); t1 = setTimeout(() => { snap(); keep = null; }, 900); }, true);
   // 17.11 ערב: כשהמעבר למסך מלא איטי, האתר מחשב מחדש גם אחרי שהשמירה שוחררה, והדף נשאר קצת מעל, על השקף הקודם.
   // לכן כל חישוב מחדש (refresh) זוכר את השקף שעל המסך לפניו (המקומות עוד הישנים) וחוזר אליו אחריו
@@ -1253,12 +1263,15 @@ window.__vid = (() => {
 // ===== 17.11 גרסה א: פקדים לסרטונים. עכבר: עצירה והמשך, 10 שנ' אחורה וקדימה, פס זמן לגרירה, מהירות.
 // הקליקר לא משתנה: רווח, חיצים, PageDown ו-Enter ממשיכים כמו קודם. במקלדת (לפי מיקום המקש, גם בעברית): K עוצר וממשיך, J ו-L עשר שניות, [ ו-] מהירות =====
 window.__vctl = (() => {
-  const SP = [0.5, 0.75, 1, 1.25, 1.5, 2];
+  // ענת 17.11 לילה: הסרטונים מתחילים ב-1.15 (המוזיקה בלי שינוי גובה). הכפתור: 1.15, 1.25, 1.5, וחזרה ל-1. רק באתר, הקבצים לא שונו
+  const SP = [1, 1.15, 1.25, 1.5], RATE0 = 1.15;
   const fmt = t => { t = Math.max(0, Math.floor(t || 0)); return Math.floor(t / 60) + ':' + String(t % 60).padStart(2, '0'); };
   const ICON = { pp: '<svg viewBox="0 0 20 20"><path class="i-play" d="M6 3.5l11 6.5-11 6.5z"/><path class="i-pause" d="M7 4v12M13 4v12"/></svg>',
     back: '<svg viewBox="0 0 20 20"><path d="M10 5l-6 5 6 5M16 5l-6 5 6 5"/></svg>', fwd: '<svg viewBox="0 0 20 20"><path d="M4 5l6 5-6 5M10 5l6 5-6 5"/></svg>' };
   const boxes = gsap.utils.toArray('.s-tour .vbox').map(box => {
     const v = box.querySelector('video'), bar = document.createElement('div'); bar.className = 'vctl';
+    v.preservesPitch = v.mozPreservesPitch = v.webkitPreservesPitch = true; v.defaultPlaybackRate = RATE0; v.playbackRate = RATE0;
+    v.addEventListener('loadedmetadata', () => { if (v.playbackRate === 1 && !v.__rateSet) v.playbackRate = RATE0; });
     bar.innerHTML = `<button class="vb" data-a="pp" aria-label="עצירה והמשך">${ICON.pp}</button><button class="vb" data-a="back" aria-label="10 שניות אחורה">${ICON.back}</button>`
       + `<button class="vb" data-a="fwd" aria-label="10 שניות קדימה">${ICON.fwd}</button><span class="tm"><b>0:00</b> / <i>0:00</i></span>`
       + `<div class="trk"><div class="fill"></div><div class="knob"></div></div><button class="vb sp" data-a="sp" aria-label="מהירות">1×</button>`;
@@ -1281,7 +1294,7 @@ window.__vctl = (() => {
       if (a === 'pp') { if (v.paused) { v.muted = false; v.play().catch(() => {}); } else v.pause(); }
       else if (a === 'back') v.currentTime = Math.max(0, v.currentTime - 10);
       else if (a === 'fwd') v.currentTime = Math.min(Math.max(0, d - .1), v.currentTime + 10);
-      else if (a === 'faster' || a === 'slower' || a === 'sp') { const i = SP.indexOf(v.playbackRate), k = i < 0 ? 2 : i;
+      else if (a === 'faster' || a === 'slower' || a === 'sp') { const i = SP.indexOf(v.playbackRate), k = i < 0 ? 1 : i; v.__rateSet = true;
         v.playbackRate = a === 'slower' ? SP[Math.max(0, k - 1)] : a === 'faster' ? SP[Math.min(SP.length - 1, k + 1)] : SP[(k + 1) % SP.length]; }
       draw(); poke(); };
     // לחיצה על הפס לא מגיעה לסרטון, לא לוקחת פוקוס ולא מזיזה שקף
