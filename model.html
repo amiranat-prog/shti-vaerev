@@ -176,7 +176,7 @@ td:last-child{text-align:end;font-family:var(--mono);font-variant-numeric:tabula
         <button id="navwalk" aria-pressed="false">הליכה</button>
       </div>
       <p class="note">גלגלת זום · לחיצה על הגלגל וגרירה מסובבת ·
-      שיפט עם הגלגל מזיז את התמונה. כמו בסקצ'אפ.</p>
+      גרירה בכפתור השמאלי מזיזה את התמונה.</p>
     </div>
     <div class="sec">
       <h2>קומה</h2>
@@ -230,7 +230,8 @@ ctl.enableZoom=matchMedia('(pointer:coarse)').matches;   // הגלגלת מטו�
    נקבע בשלב הלכידה, לפני ש-OrbitControls קורא את הטבלה בעצמו. */
 /* OrbitControls כבר הופך סיבוב להזזה כששיפט לחוץ, ולכן אסור להחליף
    את הטבלה לפי שיפט. ניסיון כזה מבטל את עצמו וההזזה לא עובדת. נבדק 9.9 */
-ctl.mouseButtons={LEFT:THREE.MOUSE.ROTATE,MIDDLE:THREE.MOUSE.ROTATE,RIGHT:THREE.MOUSE.PAN};
+/* ענת 24.11: גרירה בכפתור השמאלי מזיזה את התמונה ימינה ושמאלה. הגלגל מסובב, כמו קודם */
+ctl.mouseButtons={LEFT:THREE.MOUSE.PAN,MIDDLE:THREE.MOUSE.ROTATE,RIGHT:THREE.MOUSE.PAN};
 cvs.addEventListener('pointerdown',e=>{
   if(e.button===1)e.preventDefault();   // מבטל את הגלילה האוטומטית של הדפדפן
 },true);
@@ -340,7 +341,7 @@ const RM=matchMedia('(prefers-reduced-motion:reduce)').matches;
 const yawPitch={y:0,p:0}, keys=new Set(), clock=new THREE.Clock();
 const ray=new THREE.Raycaster(), pt=new THREE.Vector2(), down=new THREE.Vector3(0,-1,0);
 
-const H={orbit:'גלגלת זום · לחיצה על הגלגל וגרירה מסובבת · שיפט עם הגלגל מזיז',
+const H={orbit:'גלגלת זום · לחיצה על הגלגל וגרירה מסובבת · גרירה בכפתור השמאלי מזיזה',
          walk:'הליכה · גררי כדי להסתובב · גלגלת כדי להתקדם · חצים להליכה'};
 
 function go(p,t){
@@ -708,7 +709,7 @@ size();
   const touch = matchMedia('(pointer:coarse)').matches;
   document.getElementById('pubTip').textContent = touch
     ? 'גרירה מסובבת · צביטה מגדילה · בחרי חדר כדי להיכנס פנימה'
-    : 'בחוץ: גרירה מסובבת, גלגלת מגדילה · בפנים: גרירה מסתובבת במקום, גלגלת או חצים הולכים, הקירות עוצרים';
+    : 'בחוץ: גרירה מזיזה, לחיצה על הגלגל וגרירה מסובבת, גלגלת מגדילה · בפנים: גרירה מסתובבת במקום, גלגלת או חצים הולכים, הקירות עוצרים';
   const btn = (sec, label) => [...document.querySelectorAll('#rail .sec')]
     .filter(s => s.querySelector('h2')?.textContent.trim() === sec)
     .flatMap(s => [...s.querySelectorAll('button')])
