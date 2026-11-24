@@ -342,7 +342,7 @@ const yawPitch={y:0,p:0}, keys=new Set(), clock=new THREE.Clock();
 const ray=new THREE.Raycaster(), pt=new THREE.Vector2(), down=new THREE.Vector3(0,-1,0);
 
 const H={orbit:'גלגלת זום · לחיצה על הגלגל וגרירה מסובבת · גרירה בכפתור השמאלי מזיזה',
-         walk:'הליכה · גררי כדי להסתובב · גלגלת כדי להתקדם · חצים להליכה'};
+         walk:'הליכה · לחיצה על הגלגל וגרירה מסובבת · גרירה בכפתור השמאלי מזיזה · גלגלת מתקדמת · חצים להליכה'};
 
 function go(p,t){
   const P=new THREE.Vector3(...p), T=new THREE.Vector3(...t);
@@ -402,15 +402,22 @@ function setWalk(on){
   }
 }
 
-let dragging=false,last=null,moved=0;
-cvs.addEventListener('pointerdown',e=>{last=[e.clientX,e.clientY];moved=0;
+/* ענת 24.11: אותן פקודות בפנים ובחוץ. לחיצה על הגלגל וגרירה מסובבת את המבט,
+   גרירה בכפתור השמאלי (או הימני) מזיזה ימינה ושמאלה, והקירות עוצרים */
+let dragging=false,last=null,moved=0,dragBtn=0;
+cvs.addEventListener('pointerdown',e=>{last=[e.clientX,e.clientY];moved=0;dragBtn=e.button;
   if(walk){dragging=true;cvs.setPointerCapture(e.pointerId);}});
 cvs.addEventListener('pointermove',e=>{
   if(last)moved=Math.max(moved,Math.hypot(e.clientX-last[0],e.clientY-last[1]));
   if(!walk||!dragging)return;
-  yawPitch.y-=(e.clientX-last[0])*0.0026;
-  yawPitch.p=Math.max(-1.35,Math.min(1.35,yawPitch.p-(e.clientY-last[1])*0.0026));
-  last=[e.clientX,e.clientY]; applyLook();});
+  const dx=e.clientX-last[0], dy=e.clientY-last[1];
+  last=[e.clientX,e.clientY];
+  if(dragBtn===1||e.pointerType==='touch'){
+    yawPitch.y-=dx*0.0026;
+    yawPitch.p=Math.max(-1.35,Math.min(1.35,yawPitch.p-dy*0.0026));
+    applyLook(); return;}
+  const v=-dx*0.006, s=Math.sin(yawPitch.y), c=Math.cos(yawPitch.y);
+  for(let i=0;i<3;i++)advance(c*v/3,-s*v/3);});
 addEventListener('pointerup',()=>{dragging=false;});
 
 cvs.addEventListener('wheel',e=>{
@@ -709,7 +716,7 @@ size();
   const touch = matchMedia('(pointer:coarse)').matches;
   document.getElementById('pubTip').textContent = touch
     ? 'גרירה מסובבת · צביטה מגדילה · בחרי חדר כדי להיכנס פנימה'
-    : 'בחוץ: גרירה מזיזה, לחיצה על הגלגל וגרירה מסובבת, גלגלת מגדילה · בפנים: גרירה מסתובבת במקום, גלגלת או חצים הולכים, הקירות עוצרים';
+    : 'בחוץ: גרירה מזיזה, לחיצה על הגלגל וגרירה מסובבת, גלגלת מגדילה · בפנים: לחיצה על הגלגל וגרירה מסובבת, גרירה מזיזה, גלגלת או חצים הולכים, הקירות עוצרים';
   const btn = (sec, label) => [...document.querySelectorAll('#rail .sec')]
     .filter(s => s.querySelector('h2')?.textContent.trim() === sec)
     .flatMap(s => [...s.querySelectorAll('button')])
