@@ -188,11 +188,11 @@ if (!document.documentElement.classList.contains('edit') && matchMedia('(max-wid
   .s-end .rule{margin:24px auto 0;transform-origin:50% 50%}
   .s-end .rule::after{right:50%;margin-right:-3px}
   /* 25.11 ענת: כל ההדמיות בסוף, מסך לכל הדמיה */
-  .s-rend>.sk{background:#211b17}
+  .s-rend>.sk{background:var(--bg)}
   .s-rend .rimg{position:absolute;left:72px;right:72px;top:64px;bottom:56px;display:flex;align-items:center;justify-content:center}
-  .s-rend .rimg img{max-width:100%;max-height:100%;object-fit:contain;box-shadow:0 30px 80px rgba(0,0,0,.5)}
-  .s-rend .rcap{position:absolute;right:72px;bottom:16px;font-family:var(--display);font-size:clamp(16px,1.3vw,22px);color:#F4F1EA}
-  .s-rend .rcap small{font-family:var(--text);font-size:11px;letter-spacing:.3em;color:rgba(244,241,234,.6);margin-left:14px}
+  .s-rend .rimg img{max-width:100%;max-height:100%;object-fit:contain;box-shadow:0 20px 50px rgba(43,37,32,.18)}
+  .s-rend .rcap{position:absolute;right:72px;bottom:16px;font-family:var(--display);font-size:clamp(16px,1.3vw,22px);color:var(--ink)}
+  .s-rend .rcap small{font-family:var(--text);font-size:11px;letter-spacing:.3em;color:var(--soft);margin-left:14px}
   html.m .s-rend>.sk{display:flex;flex-direction:column;justify-content:center}
   html.m .s-rend .rimg{position:relative;inset:auto}
   html.m .s-rend .rcap{position:relative;right:auto;bottom:auto;margin-top:12px;text-align:right}
@@ -988,7 +988,7 @@ scenes.forEach((s, i) => {
   }
   // הקטע הפעיל: הלשונית של הפרק שלו, והחלק הפעיל של האנך
   ScrollTrigger.create({ trigger: s, start: 'top center', end: 'bottom center',
-    onToggle: self => { if (self.isActive) { current = i; tabs.forEach(a => a.classList.toggle('on', a.dataset.ch === s.dataset.ch)); document.getElementById('hint').classList.toggle('off', i > 0); document.body.classList.toggle('dark', s.classList.contains('s-tour') || s.classList.contains('s-rend')); } } });
+    onToggle: self => { if (self.isActive) { current = i; tabs.forEach(a => a.classList.toggle('on', a.dataset.ch === s.dataset.ch)); document.getElementById('hint').classList.toggle('off', i > 0); document.body.classList.toggle('dark', s.classList.contains('s-tour')); } } });
   // כניסה לקטע: התוכן נכנס בהדרגה, מלמטה, פריט אחרי פריט
   const items = s.querySelectorAll('.rv');
   if (items.length) {
