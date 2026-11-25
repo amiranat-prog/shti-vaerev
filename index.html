@@ -187,6 +187,16 @@ if (!document.documentElement.classList.contains('edit') && matchMedia('(max-wid
   .s-end h2{font-size:clamp(38px,4vw,62px)}
   .s-end .rule{margin:24px auto 0;transform-origin:50% 50%}
   .s-end .rule::after{right:50%;margin-right:-3px}
+  /* 25.11 ענת: כל ההדמיות בסוף, מסך לכל הדמיה */
+  .s-rend>.sk{background:#211b17}
+  .s-rend .rimg{position:absolute;left:72px;right:72px;top:64px;bottom:56px;display:flex;align-items:center;justify-content:center}
+  .s-rend .rimg img{max-width:100%;max-height:100%;object-fit:contain;box-shadow:0 30px 80px rgba(0,0,0,.5)}
+  .s-rend .rcap{position:absolute;right:72px;bottom:16px;font-family:var(--display);font-size:clamp(16px,1.3vw,22px);color:#F4F1EA}
+  .s-rend .rcap small{font-family:var(--text);font-size:11px;letter-spacing:.3em;color:rgba(244,241,234,.6);margin-left:14px}
+  html.m .s-rend>.sk{display:flex;flex-direction:column;justify-content:center}
+  html.m .s-rend .rimg{position:relative;inset:auto}
+  html.m .s-rend .rcap{position:relative;right:auto;bottom:auto;margin-top:12px;text-align:right}
+  .s-end .canva{margin-top:14px}
   .s-end .sig{margin-top:24px;font-size:var(--t-small);letter-spacing:.16em;color:var(--soft)}
 
   /* האנך */
@@ -766,6 +776,63 @@ if (!document.documentElement.classList.contains('edit') && matchMedia('(max-wid
   </div>
 </div></section>
 
+<section class="scene s-rend" id="s-rend-01" data-ch="4" style="--acc:var(--sage)"><div class="sk">
+  <div class="rimg"><img src="media/הדמיות/01.webp" alt="מבט מהכניסה" loading="eager"></div>
+  <div class="rcap"><small>הדמיות · 1 / 14</small>מבט מהכניסה</div>
+</div></section>
+<section class="scene s-rend" id="s-rend-02" data-ch="4" style="--acc:var(--sage)"><div class="sk">
+  <div class="rimg"><img src="media/הדמיות/02.webp" alt="סלון" loading="eager"></div>
+  <div class="rcap"><small>הדמיות · 2 / 14</small>סלון</div>
+</div></section>
+<section class="scene s-rend" id="s-rend-03" data-ch="4" style="--acc:var(--sage)"><div class="sk">
+  <div class="rimg"><img src="media/הדמיות/03.webp" alt="מטבח מהסלון" loading="eager"></div>
+  <div class="rcap"><small>הדמיות · 3 / 14</small>מטבח מהסלון</div>
+</div></section>
+<section class="scene s-rend" id="s-rend-04" data-ch="4" style="--acc:var(--sage)"><div class="sk">
+  <div class="rimg"><img src="media/הדמיות/04.webp" alt="סטודיו מהסלון" loading="eager"></div>
+  <div class="rcap"><small>הדמיות · 4 / 14</small>סטודיו מהסלון</div>
+</div></section>
+<section class="scene s-rend" id="s-rend-05" data-ch="4" style="--acc:var(--sage)"><div class="sk">
+  <div class="rimg"><img src="media/הדמיות/05.webp" alt="סטודיו" loading="eager"></div>
+  <div class="rcap"><small>הדמיות · 5 / 14</small>סטודיו</div>
+</div></section>
+<section class="scene s-rend" id="s-rend-06" data-ch="4" style="--acc:var(--sage)"><div class="sk">
+  <div class="rimg"><img src="media/הדמיות/06.webp" alt="חדר שינה, קומת קרקע" loading="eager"></div>
+  <div class="rcap"><small>הדמיות · 6 / 14</small>חדר שינה, קומת קרקע</div>
+</div></section>
+<section class="scene s-rend" id="s-rend-07" data-ch="4" style="--acc:var(--sage)"><div class="sk">
+  <div class="rimg"><img src="media/הדמיות/07.webp" alt="שירותי אורחים" loading="eager"></div>
+  <div class="rcap"><small>הדמיות · 7 / 14</small>שירותי אורחים</div>
+</div></section>
+<section class="scene s-rend" id="s-rend-08" data-ch="4" style="--acc:var(--sage)"><div class="sk">
+  <div class="rimg"><img src="media/הדמיות/08.webp" alt="חדר ההורים, המיטה" loading="eager"></div>
+  <div class="rcap"><small>הדמיות · 8 / 14</small>חדר ההורים, המיטה</div>
+</div></section>
+<section class="scene s-rend" id="s-rend-09" data-ch="4" style="--acc:var(--sage)"><div class="sk">
+  <div class="rimg"><img src="media/הדמיות/09.webp" alt="חדר ההורים, הארון והמרפסת" loading="eager"></div>
+  <div class="rcap"><small>הדמיות · 9 / 14</small>חדר ההורים, הארון והמרפסת</div>
+</div></section>
+<section class="scene s-rend" id="s-rend-10" data-ch="4" style="--acc:var(--sage)"><div class="sk">
+  <div class="rimg"><img src="media/הדמיות/10.webp" alt="מרפסת ההורים" loading="eager"></div>
+  <div class="rcap"><small>הדמיות · 10 / 14</small>מרפסת ההורים</div>
+</div></section>
+<section class="scene s-rend" id="s-rend-11" data-ch="4" style="--acc:var(--sage)"><div class="sk">
+  <div class="rimg"><img src="media/הדמיות/11.webp" alt="חדר רחצה הורים" loading="eager"></div>
+  <div class="rcap"><small>הדמיות · 11 / 14</small>חדר רחצה הורים</div>
+</div></section>
+<section class="scene s-rend" id="s-rend-12" data-ch="4" style="--acc:var(--sage)"><div class="sk">
+  <div class="rimg"><img src="media/הדמיות/12.webp" alt="החדר של גילי" loading="eager"></div>
+  <div class="rcap"><small>הדמיות · 12 / 14</small>החדר של גילי</div>
+</div></section>
+<section class="scene s-rend" id="s-rend-13" data-ch="4" style="--acc:var(--sage)"><div class="sk">
+  <div class="rimg"><img src="media/הדמיות/13.webp" alt="חדר רחצה ליד הכביסה" loading="eager"></div>
+  <div class="rcap"><small>הדמיות · 13 / 14</small>חדר רחצה ליד הכביסה</div>
+</div></section>
+<section class="scene s-rend" id="s-rend-14" data-ch="4" style="--acc:var(--sage)"><div class="sk">
+  <div class="rimg"><img src="media/הדמיות/14.webp" alt="החדר של נויה" loading="eager"></div>
+  <div class="rcap"><small>הדמיות · 14 / 14</small>החדר של נויה</div>
+</div></section>
+
 <section class="scene s-end" id="s-end" data-ch="4" style="--acc:var(--sage)"><div class="sk">
   <video class="bg loop" src="media/קסם-סריגה.mp4" poster="media/קסם-סריגה.jpg" muted loop playsinline preload="metadata"></video>
   <div class="wrap"><div class="inner">
@@ -773,6 +840,7 @@ if (!document.documentElement.classList.contains('edit') && matchMedia('(max-wid
     <div class="rule rv"></div>
     <div class="sig rv">ענת אמיר · שתי וערב · פיארברג 11</div>
     <div class="mlinkp rv"><a class="mlink" href="model.html" target="_blank" tabindex="-1" rel="noopener">למודל החי<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5 11L11 5M6 5h5v5"/></svg></a></div>
+    <div class="mlinkp canva rv"><a class="mlink" href="https://canva.link/qpxujm8jnco7qvz" target="_blank" tabindex="-1" rel="noopener">למצגת בקנבה<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5 11L11 5M6 5h5v5"/></svg></a></div>
   </div></div>
 </div></section>
 
@@ -920,7 +988,7 @@ scenes.forEach((s, i) => {
   }
   // הקטע הפעיל: הלשונית של הפרק שלו, והחלק הפעיל של האנך
   ScrollTrigger.create({ trigger: s, start: 'top center', end: 'bottom center',
-    onToggle: self => { if (self.isActive) { current = i; tabs.forEach(a => a.classList.toggle('on', a.dataset.ch === s.dataset.ch)); document.getElementById('hint').classList.toggle('off', i > 0); document.body.classList.toggle('dark', s.classList.contains('s-tour')); } } });
+    onToggle: self => { if (self.isActive) { current = i; tabs.forEach(a => a.classList.toggle('on', a.dataset.ch === s.dataset.ch)); document.getElementById('hint').classList.toggle('off', i > 0); document.body.classList.toggle('dark', s.classList.contains('s-tour') || s.classList.contains('s-rend')); } } });
   // כניסה לקטע: התוכן נכנס בהדרגה, מלמטה, פריט אחרי פריט
   const items = s.querySelectorAll('.rv');
   if (items.length) {
@@ -1350,6 +1418,7 @@ const POSES = {
   's-tour':   { kind: 'edge' }, 's-vid-a': { kind: 'edge' }, 's-vid-b': { kind: 'edge' },
   // ענת 15.11 סבב 5: הסיום היחיד הוא קו בודד שיורד מלמעלה עד תחתית המסך ונקטע על הטקסט (העיגול של סבב 4 ירד, הקוד שלו נשאר: kind 'ring', big)
   's-mat':    { kind: 'side' },   // 15.11 ערב: שקף החומרים, ירידה שקטה בשוליים השמאליים, לא על התמונות
+  's-rend-01':{ kind: 'side' }, 's-rend-02':{ kind: 'side' }, 's-rend-03':{ kind: 'side' }, 's-rend-04':{ kind: 'side' }, 's-rend-05':{ kind: 'side' }, 's-rend-06':{ kind: 'side' }, 's-rend-07':{ kind: 'side' }, 's-rend-08':{ kind: 'side' }, 's-rend-09':{ kind: 'side' }, 's-rend-10':{ kind: 'side' }, 's-rend-11':{ kind: 'side' }, 's-rend-12':{ kind: 'side' }, 's-rend-13':{ kind: 'side' }, 's-rend-14':{ kind: 'side' },
   's-end':    { kind: 'drop', sel: '.inner', through: true },
 };
 // במקומות שבהם החוט עובר בין הכותרת לטקסט, הוא מחליף את קו ההפרדה (ענת 8.11). מוסתר רק בתצוגה הזאת
